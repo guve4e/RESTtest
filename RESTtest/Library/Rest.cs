@@ -1,21 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using System.Net;
-using System.IO;
 using System.Windows.Forms;
 
-namespace CarStuffWindows.Classes
+namespace RESTtest.Library
 {
-    /// <summary>
-    /// Class that makes call to web API
-    /// It has two methods
-    /// RestGet uses Get Request
-    /// RestPost uses POST Request
-    /// </summary>
     class Rest
     {
         public string accept { get; set; }
@@ -37,11 +30,11 @@ namespace CarStuffWindows.Classes
                 request.ContentType = "application/json";
                 request.Headers.Add("Authorization", "Basic reallylongstring");
             }
-            catch(WebException we)
+            catch (WebException we)
             {
                 MessageBox.Show("Exception in Rest Constructor " + we.Message);
             }
-            
+
         }
 
         /// <summary>
@@ -52,7 +45,7 @@ namespace CarStuffWindows.Classes
         {
             string s = null;
             try
-            {   
+            {
                 HttpWebResponse objResponse = (HttpWebResponse)request.GetResponse();
                 // get the response in a stream and contain it in a string
                 using (StreamReader responseStream = new StreamReader(objResponse.GetResponseStream()))
@@ -61,16 +54,16 @@ namespace CarStuffWindows.Classes
                     responseStream.Close(); // close the stream
                 }
             }
-            catch(WebException we) // handle some exceptions
+            catch (WebException we) // handle some exceptions
             {
                 var response = we.Response as HttpWebResponse;
                 if (response == null)
                     throw;
-               MessageBox.Show(
-                   "Exception in Rest Request ->" + we.Message + "Response -> " +
-                   Convert.ToString(response));
+                MessageBox.Show(
+                    "Exception in Rest Request ->" + we.Message + "Response -> " +
+                    Convert.ToString(response));
             }
-           
+
             return s;
         }// end
 
@@ -109,5 +102,3 @@ namespace CarStuffWindows.Classes
 
     }
 }
-
-

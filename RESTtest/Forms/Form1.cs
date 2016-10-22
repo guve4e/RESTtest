@@ -46,8 +46,8 @@ namespace RESTtest
 
             
 
-            string url = this.textBox1.ToString();
-            string controller = this.textBox2.ToString();
+            string url = this.textBox1.Text.ToString();
+            string controller = this.textBox2.Text.ToString();
             string fullUrl = url + "/" + controller;
 
 
@@ -55,7 +55,7 @@ namespace RESTtest
 
 
 
-            Library.Rest rest = new Library.Rest("*/*", this.method, url, "application/json");
+            Library.Rest rest = new Library.Rest("*/*", this.method, fullUrl, "application/json");
 
             string s = rest.RestPost(this.jsonSend);
 

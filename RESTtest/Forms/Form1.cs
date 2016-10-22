@@ -15,6 +15,9 @@ namespace RESTtest
         public Form1()
         {
             InitializeComponent();
+            this.comboBox1.Items.Add("GET");
+            this.comboBox1.Items.Add("POST");
+            this.comboBox1.Items.Add("PUT");
         }
     }
 }

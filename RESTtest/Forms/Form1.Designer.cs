@@ -121,8 +121,9 @@
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(144, 118);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
+            this.comboBox1.Size = new System.Drawing.Size(134, 21);
             this.comboBox1.TabIndex = 7;
+            this.comboBox1.Text = "Choose Method";
             // 
             // label4
             // 
@@ -138,8 +139,9 @@
             this.comboBox2.FormattingEnabled = true;
             this.comboBox2.Location = new System.Drawing.Point(144, 155);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(121, 21);
+            this.comboBox2.Size = new System.Drawing.Size(134, 21);
             this.comboBox2.TabIndex = 9;
+            this.comboBox2.Text = "Choose Content Type";
             // 
             // Form1
             // 

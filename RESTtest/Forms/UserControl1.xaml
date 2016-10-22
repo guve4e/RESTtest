@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="RESTtest.Forms.UserControl1"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RESTtest.Forms"
+             mc:Ignorable="d" Height="300.898" Width="378.144">
+    <Grid x:Name="TextBoxValue" Margin="0,0,18,252">
+        <TextBox x:Name="TextBoxKey" HorizontalAlignment="Left" Height="23" Margin="45,13,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="label" Content="KEY" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label1" Content="VALUE" HorizontalAlignment="Left" Margin="182,13,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.153,-0.297"/>
+        <TextBox x:Name="TextBoxValue1" HorizontalAlignment="Left" Height="23" Margin="239,13,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+
+    </Grid>
+</UserControl>

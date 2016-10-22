@@ -14,20 +14,22 @@ namespace RESTtest.Library
         public string accept { get; set; }
         public string method { get; set; }
         public string url { get; set; }
+        public string contentType { get; set; }
 
         WebRequest request;
 
-        public Rest(string accept, string method, string url)
+        public Rest(string accept, string method, string url, string contentType)
         {
             this.accept = accept;
             this.method = method;
             this.url = url;
+            this.contentType = contentType;
 
             try
             {
                 request = WebRequest.Create(this.url);
                 request.Method = this.method;
-                request.ContentType = "application/json";
+                request.ContentType =contentType;
                 request.Headers.Add("Authorization", "Basic reallylongstring");
             }
             catch (WebException we)
@@ -71,8 +73,9 @@ namespace RESTtest.Library
         /// Makes a Request to the API POST
         /// </summary>
         /// <param name="json"></param>
-        public void RestPost(string json)
+        public System.String RestPost(string json)
         {
+            System.String result = null;
             try
             {
                 using (var streamWriter = new StreamWriter(request.GetRequestStream()))
@@ -85,7 +88,7 @@ namespace RESTtest.Library
                 var httpResponse = (HttpWebResponse)request.GetResponse();
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
-                    var result = streamReader.ReadToEnd();
+                    result = streamReader.ReadToEnd();
                 }
             }
             catch (WebException we)
@@ -98,6 +101,7 @@ namespace RESTtest.Library
                    Convert.ToString(response));
             }
 
+            return result;
         }
 
     }

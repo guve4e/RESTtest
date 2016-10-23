@@ -43,7 +43,7 @@ namespace RESTtest.Library
         /// Makes a Request to the API GET
         /// </summary>
         /// <returns></returns>
-        public string RestRequest()
+        public string RestGet()
         {
             string s = null;
             try

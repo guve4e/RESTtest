@@ -16,13 +16,14 @@ namespace RESTtest
     public partial class Form1 : Form
     {
         public static Dictionary<string, string> fields = new Dictionary<string, string>();
-
-        public string jsonSend { get; set; }
+        
         public string method { get; set; }
+        public string contentType { get; set; }
 
 
         public Form1()
         {
+            this.contentType = "application/json";
             InitializeComponent();
             // initialize comboBox1
             this.comboBox1.Items.Add("GET");
@@ -42,26 +43,26 @@ namespace RESTtest
         private void button1_Click(object sender, EventArgs e)
         {
 
+            if (this.textBox1 != null && this.textBox2 != null && 
+                this.comboBox1.SelectedItem != null && this.comboBox2.SelectedItem != null)
+
+            {
+
+                string url = this.textBox1.Text.ToString();
+                string controller = this.textBox2.Text.ToString();
+                string fullUrl = url + "/" + controller;
 
 
+                Send s = new Forms.Send(fullUrl, method, this.contentType);
+                s.Show();
+            }
             
 
-            string url = this.textBox1.Text.ToString();
-            string controller = this.textBox2.Text.ToString();
-            string fullUrl = url + "/" + controller;
-
-
+            
             // CHECK IF combobox is NULL
 
 
-
-            Library.Rest rest = new Library.Rest("*/*", this.method, fullUrl, "application/json");
-
-            string s = rest.RestPost(this.jsonSend);
-
-            MessageBox.Show(s);
-
-            ////  string s = rest.RestRequest();
+            ////  string s = rest.RestGet();
             //  try
             //  {
             //      string method = comboBox1.SelectedItem.ToString();
@@ -92,14 +93,25 @@ namespace RESTtest
                     form.Show();
                     // check if fields is null!!!
                     this.method = "POST";
-                    jsonSend = Tools.makeObject(fields);
                     break;
                 case "GET":
                     this.method = "GET";
                     break;
             }
+        }
 
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string selectedItem = (string)comboBox2.SelectedItem;
 
+            switch (selectedItem)
+            {
+                case "application/json":
+                    this.contentType = "application/json";
+
+                    break;
+                    // add more
+            }
 
         }
     }

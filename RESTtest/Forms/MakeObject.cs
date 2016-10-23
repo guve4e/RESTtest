@@ -16,11 +16,7 @@ namespace RESTtest.Forms
         private int key_count { set; get; }
         private int value_count { set; get; }
 
-        List<TextBox> keyTextBoxes = new List<TextBox>();
-        List<TextBox> valueTextBoxes = new List<TextBox>();
-
-
-        Dictionary<TextBox,TextBox> d = new Dictionary<TextBox,TextBox>();
+        private Dictionary<TextBox,TextBox> d = new Dictionary<TextBox,TextBox>();
 
         public Make_Object()
         {
@@ -78,7 +74,7 @@ namespace RESTtest.Forms
             label2.TabIndex = 4;
             label2.Text = ": VALUE";
            
-
+            // add to controls
             flowLayoutPanel1.Controls.Add(label1);
             flowLayoutPanel1.Controls.Add(textBoxKey);
             flowLayoutPanel1.Controls.Add(label2);
@@ -90,6 +86,11 @@ namespace RESTtest.Forms
 
         }
 
+        /// <summary>
+        /// DONE button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button2_Click_1(object sender, EventArgs e)
         {
             Dictionary<string, string> dict = new Dictionary<string, string>();
@@ -97,9 +98,12 @@ namespace RESTtest.Forms
             //CAREFULL HERE value_count may be -1;
             if (value_count > -1)
             {
-                 foreach (var key in d)
+                 foreach (var v in d)
                  {
-                        dict.Add(key.Key.Text.ToString(), key.Value.Text.ToString());
+                     string key = v.Key.Text.ToString();
+                     string value = v.Value.Text.ToString();
+
+                     dict.Add(key, value);
                  }
              
             }

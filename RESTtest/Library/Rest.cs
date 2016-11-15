@@ -6,6 +6,9 @@ using System.Windows.Forms;
 
 namespace RESTtest.Library
 {
+    /// <summary>
+    /// This class sends http requests
+    /// </summary>
     class Rest
     {
         public string accept { get; set; }
@@ -14,23 +17,43 @@ namespace RESTtest.Library
         public string contentType { get; set; }
 
         public Dictionary<string, string> header = new Dictionary<string, string>();
-
+        /// <summary>
+        /// Request Object
+        /// 
+        /// </summary>
         WebRequest request;
 
-        public Rest(string accept, string method, string url, string contentType)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="accept"></param>
+        /// <param name="method"></param>
+        /// <param name="url"></param>
+        /// <param name="contentType"></param>
+        public Rest(string accept, string method, string url, string contentType, Dictionary<string,string> header)
         {
             this.accept = accept;
             this.method = method;
             this.url = url;
             this.contentType = contentType;
+            this.header = header;
 
             try
             {
                 request = WebRequest.Create(this.url);
                 request.Method = this.method;
                 request.ContentType =contentType;
-                // HEADERS HERE!!!
-                request.Headers.Add("Authorization", "Basic reallylongstring");
+
+                // go trough headers dictionary
+                foreach (var v in header)
+                {
+                    string key = v.Key.ToString();
+                    string value = v.Value.ToString();
+                    // Add to Headers
+                    request.Headers.Add(key,value);
+                }
+
+               
             }
             catch (WebException we)
             {

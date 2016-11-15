@@ -47,7 +47,7 @@ namespace RESTtest.Forms
             {
                 case "GET":
                     progressBar1.Value = 30;
-                    rest = new Rest("*/*", this.method, this.url, this.type);
+                    rest = new Rest("*/*", this.method, this.url, this.type,Form1.headers);
                     progressBar1.Value = 70;
                     this.response = rest.RestGet();
                     progressBar1.Value = 100;
@@ -59,7 +59,7 @@ namespace RESTtest.Forms
                     break;
                 case "POST":
                     progressBar1.Value = 30;
-                    rest = new Rest("*/*", this.method, this.url,this.type);
+                    rest = new Rest("*/*", this.method, this.url,this.type,Form1.headers);
                     progressBar1.Value = 70;
                     this.response = rest.RestPost(this.data);
                     progressBar1.Value = 100;

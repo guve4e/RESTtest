@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using RESTtest.Library;
 using RESTtest.Forms;
 using System.Diagnostics;
+using System.Xml.Linq;
 
 namespace RESTtest
 {
@@ -109,20 +110,27 @@ namespace RESTtest
 
         }
 
+        /// <summary>
+        /// Load Environment XML 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button2_Click(object sender, EventArgs e)
         {
             OpenFileDialog fd = new OpenFileDialog();
             if ( fd.ShowDialog() == DialogResult.OK)
             {
+               
+
                 LoadXML l = new LoadXML(fd.FileName);
-                var x = l.Load();
+                l.Load();
 
-                foreach (var n in x)
-                {
-                    Debug.WriteLine(n.Key + " => " + n.Value);
-                }
+                //foreach (var n in x)
+                //{
+                //    Debug.WriteLine(n.Key + " => " + n.Value);
+                //}
 
-                MessageBox.Show(fd.FileName);
+                //MessageBox.Show(fd.FileName);
             }
         }
 

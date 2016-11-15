@@ -13,13 +13,35 @@ namespace RESTtest.Forms
 {
     public partial class Make_Object : Form
     {   
+        /// <summary>
+        /// Switch Variable.
+        /// MakeObjects can be called to make
+        /// Headers and Data.
+        /// sw = "data" or sw = "headers"
+        /// </summary>       
+        private string sw { set; get; }
+
+        /// <summary>
+        /// Initial value: -1
+        /// </summary>
         private int key_count { set; get; }
+
+        /// <summary>
+        /// Initial value: -1
+        /// </summary>
         private int value_count { set; get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private Dictionary<TextBox,TextBox> d = new Dictionary<TextBox,TextBox>();
-
-        public Make_Object()
+        
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public Make_Object(string data)
         {
+            this.sw = data;
             key_count = -1;
             value_count = -1;
             InitializeComponent();
@@ -39,7 +61,6 @@ namespace RESTtest.Forms
 
             key_count++;
             value_count++;
-
 
             // 
             // textBox1
@@ -81,7 +102,7 @@ namespace RESTtest.Forms
             flowLayoutPanel1.Controls.Add(textBoxValue);
             this.Controls.Add(flowLayoutPanel1);
 
-           // add text fields to dictionary
+           // add text data to dictionary
             d.Add(textBoxKey, textBoxValue);
 
         }
@@ -95,9 +116,12 @@ namespace RESTtest.Forms
         {
             Dictionary<string, string> dict = new Dictionary<string, string>();
 
-            //CAREFULL HERE value_count may be -1;
+
+            // CAREFULL HERE value_count may be -1;
             if (value_count > -1)
             {
+                // Collect the values from the text fields and
+                // insert them in the dict dictionary
                  foreach (var v in d)
                  {
                      string key = v.Key.Text.ToString();
@@ -111,7 +135,21 @@ namespace RESTtest.Forms
             {
                 MessageBox.Show("Add Members First");
             }
-            Form1.fields = dict;
+        
+            
+            switch (this.sw)
+            {
+                case "data": // if called to make JSON object
+                    Form1.data = dict;
+                    break;
+                case "headers": // if called to make Headers
+                    Form1.headers = dict;
+                    break;
+                default: // it shouldn't be here 
+                    throw new Exception("Wrong Initialization of sw variable");
+
+            }
+            // close the form
             Close();          
         }
     }

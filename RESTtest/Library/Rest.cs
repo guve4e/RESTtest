@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace RESTtest.Library
@@ -15,6 +12,8 @@ namespace RESTtest.Library
         public string method { get; set; }
         public string url { get; set; }
         public string contentType { get; set; }
+
+        public Dictionary<string, string> header = new Dictionary<string, string>();
 
         WebRequest request;
 
@@ -30,6 +29,7 @@ namespace RESTtest.Library
                 request = WebRequest.Create(this.url);
                 request.Method = this.method;
                 request.ContentType =contentType;
+                // HEADERS HERE!!!
                 request.Headers.Add("Authorization", "Basic reallylongstring");
             }
             catch (WebException we)
@@ -103,6 +103,8 @@ namespace RESTtest.Library
 
             return result;
         }
+
+    
 
     }
 }

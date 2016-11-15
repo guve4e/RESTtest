@@ -71,6 +71,7 @@
     <Compile Include="Forms\Send.Designer.cs">
       <DependentUpon>Send.cs</DependentUpon>
     </Compile>
+    <Compile Include="Library\LoadXML.cs" />
     <Compile Include="Library\Rest.cs" />
     <Compile Include="Library\Tools.cs" />
     <Compile Include="Models\Object.cs" />

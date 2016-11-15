@@ -10,13 +10,25 @@ using System.Windows.Forms;
 using Newtonsoft.Json;
 using RESTtest.Library;
 using RESTtest.Forms;
+using System.Diagnostics;
 
 namespace RESTtest
 {
     public partial class Form1 : Form
-    {
-        public static Dictionary<string, string> fields = new Dictionary<string, string>();
-        
+    {   
+        /// <summary>
+        /// Global Static
+        /// holds JSON Data
+        /// </summary>
+        public static Dictionary<string, string> data = new Dictionary<string, string>();
+
+        /// <summary>
+        /// Global, Static
+        /// Headers
+        /// </summary>
+        public static Dictionary<string, string> headers = new Dictionary<string, string>();
+
+
         public string method { get; set; }
         public string contentType { get; set; }
 
@@ -56,29 +68,10 @@ namespace RESTtest
                 Send s = new Forms.Send(fullUrl, method, this.contentType);
                 s.Show();
             }
-            
-
-            
-            // CHECK IF combobox is NULL
-
-
-            ////  string s = rest.RestGet();
-            //  try
-            //  {
-            //      string method = comboBox1.SelectedItem.ToString();
-            //      string contentType = comboBox1.SelectedItem.ToString();
-
-            //      MessageBox.Show("Method->" + method + "/n" + "ContentTypee-> " + contentType);
-            //  } 
-            //  catch(NullReferenceException ex)
-            //  {
-            //      MessageBox.Show("There is an empty field /n Please enter valid values");
-            //      MessageBox.Show("Exception in Form 1:" + ex.Message);
-            //  }
-            //  catch(Exception ex)
-            //  {
-            //      MessageBox.Show("Exception in Form 1:" + ex.Message);
-            //  }
+            else
+            {
+                MessageBox.Show("Enter Valid information in the data");
+            }
 
         }
 
@@ -89,9 +82,10 @@ namespace RESTtest
             switch (selectedItem)
             {
                 case "POST":
-                    Make_Object form = new Make_Object();
+                    Make_Object form = new Make_Object("data");
+                    form.Text = "Make JSON String";
                     form.Show();
-                    // check if fields is null!!!
+                    // check if data is null!!!
                     this.method = "POST";
                     break;
                 case "GET":
@@ -113,6 +107,35 @@ namespace RESTtest
                     // add more
             }
 
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog fd = new OpenFileDialog();
+            if ( fd.ShowDialog() == DialogResult.OK)
+            {
+                LoadXML l = new LoadXML(fd.FileName);
+                var x = l.Load();
+
+                foreach (var n in x)
+                {
+                    Debug.WriteLine(n.Key + " => " + n.Value);
+                }
+
+                MessageBox.Show(fd.FileName);
+            }
+        }
+
+        /// <summary>
+        /// Make Headers Button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Make_Object form = new Make_Object("headers");
+            form.Text = "Make Headers";
+            form.Show();
         }
     }
 }

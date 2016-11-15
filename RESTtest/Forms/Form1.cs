@@ -66,7 +66,7 @@ namespace RESTtest
                 string fullUrl = url + "/" + controller;
 
 
-                Send s = new Forms.Send(fullUrl, method, this.contentType);
+                Send s = new Forms.Send(fullUrl, method, this.contentType,data,headers,"manual");
                 s.Show();
             }
             else
@@ -120,17 +120,8 @@ namespace RESTtest
             OpenFileDialog fd = new OpenFileDialog();
             if ( fd.ShowDialog() == DialogResult.OK)
             {
-               
-
                 LoadXML l = new LoadXML(fd.FileName);
                 l.Load();
-
-                //foreach (var n in x)
-                //{
-                //    Debug.WriteLine(n.Key + " => " + n.Value);
-                //}
-
-                //MessageBox.Show(fd.FileName);
             }
         }
 

@@ -30,7 +30,7 @@ namespace RESTtest.Library
         /// </summary>
         public string xml { get; set; }
         private XDocument xbook;
-        private XDocument xenv;
+        public XDocument xenv;
         public XElement xreport;
         public string Environment;
         internal JObject envariables;

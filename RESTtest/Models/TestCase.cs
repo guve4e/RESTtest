@@ -14,8 +14,9 @@ namespace RESTtest.Models
 {
     class TestCase
     {
-
+       
         private XDocument xdoc;
+        private XDocument envdoc;
         private LoadXML book;
 
         private int HttpCode;
@@ -23,20 +24,40 @@ namespace RESTtest.Models
         JSchema schema;
 
 
+        internal Dictionary<string, string> headers = new Dictionary<string, string>();
+
         public IList<ValidationError> schemaErrors;
         private XElement xrequest;
         private XElement xresponse;
        // private RestResponse theResponse = null;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="parent">LoadXML Object</param>
+        /// <param name="fname">Name of Test Case file</param>
         public TestCase(LoadXML parent, string fname)
         {
             book = parent;
             try
             {
+
+                envdoc = parent.xenv;
                 xdoc = XDocument.Load(fname);
+
+
+                string url = xdoc.Root.Attribute("url").Value;
+                Debug.WriteLine("URL--->" + url);
+
+                var da = xdoc.Root.Element("data");
+                JSchema s = JSchema.Parse(da.Value);
+                Debug.WriteLine("S--->" + s.ToString());
+
                 var xresult = xdoc.Root.Element("result");
+
                 string codes = parent.Attribute(xresult, "code");
                 HttpCode = Convert.ToInt32(codes);
+
                 ContentType = parent.Attribute(xresult, "type");
                 schema = JSchema.Parse(xresult.Value);
               
@@ -50,21 +71,22 @@ namespace RESTtest.Models
 
         public void Execute(string tid)
         {
-
+           
             string rtype = xdoc.Root.Attribute("type").Value;
+           
+
             bool success = false;
 
             Debug.WriteLine("ID " + tid);
-            Debug.WriteLine("TYPE " + rtype);
+            Debug.WriteLine("METHOD " + rtype);
+        //    Debug.WriteLine("DATA " + data.ToString());
             Debug.WriteLine("XDOC " + xdoc.Root);
+
 
             switch (rtype)
             {
                 //case "GET": success = executeRestGet(tid, rtype, xdoc.Root); break;
-                //case "POST": success = executeRestPost(tid, rtype, xdoc.Root); break;
-                //case "PUT": success = executeRestPost(tid, rtype, xdoc.Root); break;
-                //case "DELETE": success = executeRestGet(tid, rtype, xdoc.Root); break;
-                //default: Terminal.WriteError("Unsupported test type: " + rtype); break;
+              
             }
 
             if (!success)
@@ -72,5 +94,26 @@ namespace RESTtest.Models
                
             }
         }
+
+        private bool executeRestGet(string tid, string rtype, XElement root)
+        {
+            Console.Write("Running test {0} >", tid);
+            try
+            {
+               
+               
+
+            }
+            catch (Exception ex)
+            {
+               
+            }
+            return true;
+        }
+
+
+
+
+
     }
 }

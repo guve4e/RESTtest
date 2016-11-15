@@ -46,8 +46,15 @@ namespace RESTtest.Models
                 xdoc = XDocument.Load(fname);
 
 
-                string url = xdoc.Root.Attribute("url").Value;
-                Debug.WriteLine("URL--->" + url);
+
+                string controller = xdoc.Root.Attribute("url").Value;
+                string method = xdoc.Root.Attribute("type").Value;
+
+                Debug.WriteLine("Controller ---> " + controller);
+                Debug.WriteLine("Method ---> " + method);
+
+
+
 
                 var da = xdoc.Root.Element("data");
                 JSchema s = JSchema.Parse(da.Value);

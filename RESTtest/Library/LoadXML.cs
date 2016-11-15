@@ -2,6 +2,7 @@
 using RESTtest.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -33,6 +34,9 @@ namespace RESTtest.Library
         public XDocument xenv;
         public XElement xreport;
         public string Environment;
+
+        public string url;
+
         internal JObject envariables;
 
         internal Dictionary<string, string> headers = new Dictionary<string, string>();
@@ -71,6 +75,14 @@ namespace RESTtest.Library
             {    
                 // get environmental variables 
                 envariables = new JObject();
+
+
+
+                url =  Attribute(xenv.Root, "base");
+
+
+                //     Debug.WriteLine("URL->" + x);
+
                 foreach (XElement xvar in xenv.Root.Element("variables").Elements())
                 {
                     envariables.Add(new JProperty(Attribute(xvar, "id"),Attribute(xvar, "value")));

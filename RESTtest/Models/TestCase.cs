@@ -53,10 +53,10 @@ namespace RESTtest.Models
                 }
                 var xresult = xdoc.Root.Element("result");
  
-                string codes = parent.Attribute(xresult, "code");
+                string codes = Tools.Attr(xresult, "code");
                 HttpCode = Convert.ToInt32(codes);
 
-                ContentType = parent.Attribute(xresult, "type");
+                ContentType = Tools.Attr(xresult, "type");
                 schema = JSchema.Parse(xresult.Value);
               
             }

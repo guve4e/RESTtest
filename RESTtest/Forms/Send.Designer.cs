@@ -41,6 +41,7 @@
             // 
             // textBox1
             // 
+            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox1.Location = new System.Drawing.Point(3, 98);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";

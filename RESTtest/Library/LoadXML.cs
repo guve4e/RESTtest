@@ -60,20 +60,6 @@ namespace RESTtest.Library
         }
 
         /// <summary>
-        /// Gets the attribute of an XML element
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public string Attribute(XElement parent, XName name)
-        {
-            if (parent == null) return "";
-            var atr = parent.Attribute(name);
-            if (atr == null) return "";
-            return atr.Value;
-        }
-
-        /// <summary>
         /// Loads and Parses XML file
         /// Updates requests list
         /// </summary>
@@ -84,21 +70,21 @@ namespace RESTtest.Library
                 // get environmental variables 
                 envariables = new JObject();
                 // get Url
-                url = Attribute(xenv.Root, "base");
+                url = Tools.Attr(xenv.Root, "base");
                 // get Environmental Variables
                 foreach (XElement xvar in xenv.Root.Element("variables").Elements())
                 {
-                    envariables.Add(new JProperty(Attribute(xvar, "id"), Attribute(xvar, "value")));
+                    envariables.Add(new JProperty(Tools.Attr(xvar, "id"), Tools.Attr(xvar, "value")));
                 }
                 // get headers
                 foreach (XElement xhead in xenv.Root.Element("header-all").Elements())
                 {
-                    headers.Add(Attribute(xhead, "id"), Attribute(xhead, "value"));
+                    headers.Add(Tools.Attr(xhead, "id"), Tools.Attr(xhead, "value"));
                 }
                 // get Sequences
                 foreach (XElement xsq in xenv.Root.Elements("sequence"))
                 {
-                    string id = Attribute(xsq, "id");
+                    string id = Tools.Attr(xsq, "id");
 
                     foreach (XElement xtest in xsq.Elements("test"))
                     {

@@ -78,6 +78,8 @@
     <Compile Include="Library\LoadXML.cs" />
     <Compile Include="Library\Rest.cs" />
     <Compile Include="Library\Tools.cs" />
+    <Compile Include="Models\RestRequest.cs" />
+    <Compile Include="Models\RestResponse.cs" />
     <Compile Include="Models\TestCase.cs" />
     <Compile Include="Models\Object.cs" />
     <Compile Include="Program.cs" />

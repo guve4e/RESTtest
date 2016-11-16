@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using RESTtest.Library;
+using RESTtest.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -37,9 +38,21 @@ namespace RESTtest.Forms
         public string  method { get; set; }
         public string type { get; set; }
         public string data { get; set; }
-        public string response { get; set; }
 
-        public Send(string url, string method, string type, Dictionary<string, string> json, Dictionary<string, string> headers, string sw)
+        private RestResponse response;
+
+        public List<RestRequest> requests = new List<RestRequest>();
+
+        /// <summary>
+        /// Constructor 1
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="method"></param>
+        /// <param name="type"></param>
+        /// <param name="json"></param>
+        /// <param name="headers"></param>
+        /// <param name="sw"></param>
+        public Send(string url, string method, string type, Dictionary<string, string> json, Dictionary<string, string> headers, string sw = "manual")
         {
             InitializeComponent();
             this.json = json;
@@ -50,6 +63,19 @@ namespace RESTtest.Forms
             this.sw = sw;
   
             progressBar1.Style = ProgressBarStyle.Continuous;
+        }
+
+        /// <summary>
+        /// Constructor 2
+        /// </summary>
+        /// <param name="requests">List of requests</param>
+        /// <param name="sw">switch variable</param>
+        public Send(List<RestRequest> requests, string sw = "automatic")
+        {
+            InitializeComponent();
+            progressBar1.Style = ProgressBarStyle.Continuous;
+            this.requests = requests;
+            this.sw = sw;
         }
 
         /// <summary>
@@ -66,12 +92,13 @@ namespace RESTtest.Forms
                 switch (this.method)
                 {
                     case "GET":
+                       
                         progressBar1.Value = 30;
                         rest = new Rest("*/*", this.method, this.url, this.type, this.headers);
                         progressBar1.Value = 70;
                         this.response = rest.RestGet();
                         progressBar1.Value = 100;
-                        var g = JsonConvert.SerializeObject(this.response, Formatting.Indented);
+                        var g = JsonConvert.SerializeObject(this.response.RawData, Formatting.Indented);
                         this.textBox1.Clear();
                         this.textBox1.Text = g;
                         // clear the data dictionary
@@ -81,7 +108,7 @@ namespace RESTtest.Forms
                         progressBar1.Value = 30;
                         rest = new Rest("*/*", this.method, this.url, this.type, this.headers);
                         progressBar1.Value = 70;
-                        this.response = rest.RestPost(this.data);
+                      //  this.response = rest.RestPost(this.data);
                         progressBar1.Value = 100;
                         var p = JsonConvert.SerializeObject(this.response, Formatting.Indented);
                         this.textBox1.Clear();
@@ -98,7 +125,38 @@ namespace RESTtest.Forms
             }
             else if (sw == "automatic")
             {
+                foreach(var l in requests)
+                {
+                    string url = l.url + "/" + l.controller;
 
+                    if (l.method == "GET")
+                    {
+                        progressBar1.Value = 30;
+                        rest = new Rest("*/*", l.method, url, l.type, l.header);
+                        progressBar1.Value = 70;
+                        this.response = rest.RestGet();
+                        progressBar1.Value = 100;
+                        var g = JsonConvert.SerializeObject(this.response, Formatting.Indented);
+
+                        this.textBox2.Text = url;
+                        this.textBox3.Text = l.method;
+                        this.textBox4.Text = l.type;
+
+                        //   this.textBox1.Clear();
+                        this.textBox1.Text += g;
+                    }
+                    else if (l.method == "POST")
+                    {
+                        progressBar1.Value = 30;
+                        rest = new Rest("*/*", l.method, url, this.type, l.header);
+                        progressBar1.Value = 70;
+                     //   this.response = rest.RestPost(l.json_data);
+                        progressBar1.Value = 100;
+                        var p = JsonConvert.SerializeObject(this.response, Formatting.Indented);
+                        this.textBox1.Clear();
+                        this.textBox1.Text = p;
+                    }
+                }
             }     
         }
 
@@ -144,7 +202,10 @@ namespace RESTtest.Forms
             }
             else if (sw == "automatic")
             {
-
+                string url = requests[0].url + "/" + requests[0].controller;
+                this.textBox2.Text = url;
+                this.textBox3.Text = requests[0].method;
+                this.textBox4.Text = requests[0].type;
             }            
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Windows.Forms;
+using RESTtest.Models;
 
 namespace RESTtest.Library
 {
@@ -52,8 +53,6 @@ namespace RESTtest.Library
                     // Add to Headers
                     request.Headers.Add(key,value);
                 }
-
-               
             }
             catch (WebException we)
             {
@@ -66,21 +65,36 @@ namespace RESTtest.Library
         /// Makes a Request to the API GET
         /// </summary>
         /// <returns></returns>
-        public string RestGet()
+        public RestResponse RestGet()
         {
             string s = null;
+            RestResponse res = new RestResponse();
+
             try
             {
                 HttpWebResponse objResponse = (HttpWebResponse)request.GetResponse();
                 // get the response in a stream and contain it in a string
                 using (StreamReader responseStream = new StreamReader(objResponse.GetResponseStream()))
                 {
-                    s = responseStream.ReadToEnd();
+
+                    var start = DateTime.Now;
+                    res.Duration = DateTime.Now - start;
+
+                    if (objResponse is HttpWebResponse) res.UpdateFrom(objResponse as HttpWebResponse);
+                    var hresponse = (HttpWebResponse)objResponse;
+
+                  //  logger.Debug(hresponse.StatusDescription);
+                    res.Success = true;
+
                     responseStream.Close(); // close the stream
                 }
             }
             catch (WebException we) // handle some exceptions
             {
+                //if (we.Response is HttpWebResponse) res.UpdateFrom(we.Response as HttpWebResponse);
+                //res.Message = we.Message;
+                //res.Success = false;
+
                 var response = we.Response as HttpWebResponse;
                 if (response == null)
                     throw;
@@ -89,7 +103,7 @@ namespace RESTtest.Library
                     Convert.ToString(response));
             }
 
-            return s;
+            return res;
         }// end
 
         /// <summary>

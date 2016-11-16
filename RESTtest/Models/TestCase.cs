@@ -21,15 +21,13 @@ namespace RESTtest.Models
 
         private int HttpCode;
         private string ContentType;
-        JSchema schema;
+        JSchema schema, data;
 
+        private string url;
+        private string method;
+        private string controller;
 
         internal Dictionary<string, string> headers = new Dictionary<string, string>();
-
-        public IList<ValidationError> schemaErrors;
-        private XElement xrequest;
-        private XElement xresponse;
-       // private RestResponse theResponse = null;
 
         /// <summary>
         /// 
@@ -43,25 +41,18 @@ namespace RESTtest.Models
             {
 
                 envdoc = parent.xenv;
+                url = parent.url;
                 xdoc = XDocument.Load(fname);
-
-
-
-                string controller = xdoc.Root.Attribute("url").Value;
-                string method = xdoc.Root.Attribute("type").Value;
-
-                Debug.WriteLine("Controller ---> " + controller);
-                Debug.WriteLine("Method ---> " + method);
-
-
-
-
-                var da = xdoc.Root.Element("data");
-                JSchema s = JSchema.Parse(da.Value);
-                Debug.WriteLine("S--->" + s.ToString());
-
+                this.controller = xdoc.Root.Attribute("url").Value;
+                this.method = xdoc.Root.Attribute("type").Value;
+                // if POST, PUT, DELETE
+                if (method == "POST")
+                {
+                    var d = xdoc.Root.Element("data");
+                    data = JSchema.Parse(d.Value);
+                }
                 var xresult = xdoc.Root.Element("result");
-
+ 
                 string codes = parent.Attribute(xresult, "code");
                 HttpCode = Convert.ToInt32(codes);
 
@@ -80,47 +71,20 @@ namespace RESTtest.Models
         {
            
             string rtype = xdoc.Root.Attribute("type").Value;
-           
-
-            bool success = false;
-
-            Debug.WriteLine("ID " + tid);
-            Debug.WriteLine("METHOD " + rtype);
-        //    Debug.WriteLine("DATA " + data.ToString());
-            Debug.WriteLine("XDOC " + xdoc.Root);
-
-
-            switch (rtype)
+     
+            RestRequest request = new RestRequest();
+            request.url = this.url;
+            request.controller = this.controller;
+            request.method = this.method;
+            request.header = book.headers;
+            if (data != null)
             {
-                //case "GET": success = executeRestGet(tid, rtype, xdoc.Root); break;
-              
-            }
+                request.json_data = data.ToString();
+            }   
 
-            if (!success)
-            {
-               
-            }
+            LoadXML.requests.Add(request);
+         
         }
-
-        private bool executeRestGet(string tid, string rtype, XElement root)
-        {
-            Console.Write("Running test {0} >", tid);
-            try
-            {
-               
-               
-
-            }
-            catch (Exception ex)
-            {
-               
-            }
-            return true;
-        }
-
-
-
-
 
     }
 }

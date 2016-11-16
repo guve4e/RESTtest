@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using RESTtest.Forms;
 using RESTtest.Models;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,11 @@ using System.Xml.Serialization;
 
 namespace RESTtest.Library
 {
+    /// <summary>
+    /// Load Information from XML
+    /// Makes Lists of requests to be
+    /// send to Sent Form for Processing
+    /// </summary>
     class LoadXML
     {
         /// <summary>
@@ -30,16 +36,17 @@ namespace RESTtest.Library
         /// XML String
         /// </summary>
         public string xml { get; set; }
-        private XDocument xbook;
+
         public XDocument xenv;
-        public XElement xreport;
-        public string Environment;
 
         public string url;
 
         internal JObject envariables;
 
         internal Dictionary<string, string> headers = new Dictionary<string, string>();
+
+        public static List<RestRequest> requests = new List<RestRequest>();
+
 
         /// <summary>
         /// Constructor
@@ -68,58 +75,58 @@ namespace RESTtest.Library
 
         /// <summary>
         /// Loads and Parses XML file
+        /// Updates requests list
         /// </summary>
         public void Load()
         {
             try
-            {    
+            {
                 // get environmental variables 
                 envariables = new JObject();
-
-
-
-                url =  Attribute(xenv.Root, "base");
-
-
-                //     Debug.WriteLine("URL->" + x);
-
+                // get Url
+                url = Attribute(xenv.Root, "base");
+                // get Environmental Variables
                 foreach (XElement xvar in xenv.Root.Element("variables").Elements())
                 {
-                    envariables.Add(new JProperty(Attribute(xvar, "id"),Attribute(xvar, "value")));
+                    envariables.Add(new JProperty(Attribute(xvar, "id"), Attribute(xvar, "value")));
                 }
                 // get headers
                 foreach (XElement xhead in xenv.Root.Element("header-all").Elements())
                 {
                     headers.Add(Attribute(xhead, "id"), Attribute(xhead, "value"));
                 }
-
+                // get Sequences
                 foreach (XElement xsq in xenv.Root.Elements("sequence"))
                 {
                     string id = Attribute(xsq, "id");
-     
+
                     foreach (XElement xtest in xsq.Elements("test"))
                     {
                         string tid = xtest.Attribute("src").Value;
-                        string fname = xtest.Attribute("src").Value + ".xml";
+                        string f = xtest.Attribute("src").Value + ".xml";
+                        string fname = "TestCases/" + f; 
                         if (!File.Exists(fname))
                         {
                             MessageBox.Show("File not found: " + fname);
                             return;
                         }
-
-                        var tc = new TestCase(this,fname);
-                   
+                        // make Test Case object
+                        var tc = new TestCase(this, fname);
+                        // execute
                         tc.Execute(fname);
                     }
                 }
 
-
+                // Send it to Send Form
+                Send s = new Send(requests, "automatic");
+                s.Show();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
-        }
+
+        }// end Load
        
     }// end class
 }// end namespace 

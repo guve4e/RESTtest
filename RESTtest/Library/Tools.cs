@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using Newtonsoft.Json.Linq;
 
 namespace RESTtest.Library
 {
@@ -29,6 +31,20 @@ namespace RESTtest.Library
             string s = Newtonsoft.Json.JsonConvert.SerializeObject(exo);
             // return string representation
             return s;
+        }
+
+
+        public static string Attr(XElement parent, XName name)
+        {
+            if (parent == null) return "";
+            var atr = parent.Attribute(name);
+            if (atr == null) return "";
+            return atr.Value;
+        }
+
+        internal static string Attr(JObject jresponse, string v)
+        {
+            throw new NotImplementedException();
         }
     }
 }

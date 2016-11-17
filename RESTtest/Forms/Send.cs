@@ -146,8 +146,6 @@ namespace RESTtest.Forms
                         this.textBox2.Text = url;
                         this.textBox3.Text = l.method;
                         this.textBox4.Text = l.type;
-
-                        //   this.textBox1.Clear();
                         this.textBox1.Text += g;
                     }
                     else if (l.method == "POST")
@@ -158,8 +156,7 @@ namespace RESTtest.Forms
                         this.response = rest.RestPost(l.json_data);
                         progressBar1.Value = 100;
                         var p = JsonConvert.SerializeObject(this.response, Formatting.Indented);
-                        this.textBox1.Clear();
-                        this.textBox1.Text = p;
+                        this.textBox1.Text += p;
                     }
                 }
             }     

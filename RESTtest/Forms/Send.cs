@@ -35,9 +35,13 @@ namespace RESTtest.Forms
         public string sw { get; set; }
 
         public string  url { get; set; }
+
         public string  method { get; set; }
+
         public string type { get; set; }
+
         public string data { get; set; }
+
 
         private RestResponse response;
 
@@ -108,7 +112,7 @@ namespace RESTtest.Forms
                         progressBar1.Value = 30;
                         rest = new Rest("*/*", this.method, this.url, this.type, this.headers);
                         progressBar1.Value = 70;
-                      //  this.response = rest.RestPost(this.data);
+                        this.response = rest.RestPost(this.data);
                         progressBar1.Value = 100;
                         var p = JsonConvert.SerializeObject(this.response, Formatting.Indented);
                         this.textBox1.Clear();
@@ -123,8 +127,9 @@ namespace RESTtest.Forms
 
                 }
             }
-            else if (sw == "automatic")
+            else if (sw == "automatic") // if loaded from XML
             {
+                // go to eache request and send it 
                 foreach(var l in requests)
                 {
                     string url = l.url + "/" + l.controller;
@@ -150,7 +155,7 @@ namespace RESTtest.Forms
                         progressBar1.Value = 30;
                         rest = new Rest("*/*", l.method, url, this.type, l.header);
                         progressBar1.Value = 70;
-                     //   this.response = rest.RestPost(l.json_data);
+                        this.response = rest.RestPost(l.json_data);
                         progressBar1.Value = 100;
                         var p = JsonConvert.SerializeObject(this.response, Formatting.Indented);
                         this.textBox1.Clear();
@@ -168,6 +173,7 @@ namespace RESTtest.Forms
         /// <param name="e"></param>
         private void Send_Load(object sender, EventArgs e)
         {
+            // If Manually entered data in the fields
             if (sw == "manual")
             {
                 this.textBox2.Text = this.url;
@@ -200,8 +206,9 @@ namespace RESTtest.Forms
                     this.textBox1.Text += data + "\r\n";
                 }
             }
-            else if (sw == "automatic")
-            {
+            else if (sw == "automatic") // If loaded from XML
+            {   
+                // Load the first request 
                 string url = requests[0].url + "/" + requests[0].controller;
                 this.textBox2.Text = url;
                 this.textBox3.Text = requests[0].method;

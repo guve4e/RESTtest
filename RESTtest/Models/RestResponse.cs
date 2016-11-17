@@ -18,17 +18,19 @@ using System.Xml.Linq;
 
 namespace RESTtest.Models
 {
+    /// <summary>
+    /// Describes Web Response from the API
+    /// </summary>
 	public class RestResponse
 	{
-		
 
+        // members
+        public string Method = "";
 		public bool Success = false;
 		public string ContentType = "";
 		public string RawData = "";
 		public string CleanData = "";
 		public int HttpCode = 0;
-        public string data = "";
-
 		public string Message = "";
 		public string RedirectUrl = "";
 
@@ -37,6 +39,11 @@ namespace RESTtest.Models
 		public string Code;
 		public TimeSpan Duration;
 
+        /// <summary>
+        /// Rest class sends an HttpWebRespose to this method.
+        /// The method updates the fields of the class
+        /// </summary>
+        /// <param name="response"></param>
 		public void UpdateFrom(HttpWebResponse response)
 		{
 

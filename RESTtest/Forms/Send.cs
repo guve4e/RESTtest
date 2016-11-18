@@ -126,6 +126,7 @@ namespace RESTtest.Forms
                         break;
 
                 }
+                requests.Clear(); // clear the requests
             }
             else if (sw == "automatic") // if loaded from XML
             {
@@ -159,6 +160,7 @@ namespace RESTtest.Forms
                         this.textBox1.Text += p;
                     }
                 }
+                requests.Clear(); // clear the requests
             }     
         }
 

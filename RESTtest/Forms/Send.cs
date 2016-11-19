@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using RESTtest.Databse;
 using RESTtest.Library;
 using RESTtest.Models;
 using System;
@@ -41,6 +42,9 @@ namespace RESTtest.Forms
         public string type { get; set; }
 
         public string data { get; set; }
+        public string baseUrl { get; set; }
+
+        public string controller { get; set; }
 
 
         private RestResponse response;
@@ -90,6 +94,7 @@ namespace RESTtest.Forms
         private void button1_Click(object sender, EventArgs e)
         {
             Rest rest = null;
+            UpdateRequest u = new UpdateRequest(); // Update Database
 
             if (sw == "manual")
             {
@@ -126,6 +131,12 @@ namespace RESTtest.Forms
                         break;
 
                 }
+                RestRequest r = new RestRequest();
+                r.url = this.baseUrl;
+                r.method = this.method;
+                r.header = this.headers;
+                r.controller = this.controller;
+                u.CreateRequest(r);
                 requests.Clear(); // clear the requests
             }
             else if (sw == "automatic") // if loaded from XML

@@ -28,7 +28,7 @@ namespace RESTtest.Databse
         public Database()
         {
             this.version = "MSSQLLocalDB";
-            this.filename = "Database.mdf";
+            this.filename = "DB.mdf";
 
             this.connectionInfo = String.Format(@"Data Source = (LocalDB)\{0};AttachDbFilename=|DataDirectory|\{1};Integrated Security=True;", this.version, this.filename);
 

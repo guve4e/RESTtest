@@ -12,6 +12,8 @@ using RESTtest.Library;
 using RESTtest.Forms;
 using System.Diagnostics;
 using System.Xml.Linq;
+using RESTtest.Databse;
+using RESTtest.Models;
 
 namespace RESTtest
 {
@@ -60,13 +62,15 @@ namespace RESTtest
                 this.comboBox1.SelectedItem != null && this.comboBox2.SelectedItem != null)
 
             {
-
+              
                 string url = this.textBox1.Text.ToString();
                 string controller = this.textBox2.Text.ToString();
                 string fullUrl = url + "/" + controller;
 
 
                 Send s = new Forms.Send(fullUrl, method, this.contentType,data,headers,"manual");
+                s.baseUrl = url; // update url
+                s.controller = controller; // update controller 
                 s.Show();
             }
             else
@@ -135,6 +139,15 @@ namespace RESTtest
             Make_Object form = new Make_Object("headers");
             form.Text = "Make Headers";
             form.Show();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            UpdateRequest db = new UpdateRequest();
+            RestRequest r = db.GetLastUpdatedRowIdRequest();
+            this.textBox1.Text = r.url;
+            this.textBox2.Text = r.controller;
+
         }
     }
 }

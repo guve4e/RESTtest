@@ -42,7 +42,6 @@
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.process1 = new System.Diagnostics.Process();
             this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -54,7 +53,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(524, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(426, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -72,7 +71,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(15, 371);
+            this.button1.Location = new System.Drawing.Point(15, 249);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(91, 47);
             this.button1.TabIndex = 1;
@@ -82,7 +81,7 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(144, 47);
+            this.textBox1.Location = new System.Drawing.Point(103, 47);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(311, 20);
             this.textBox1.TabIndex = 2;
@@ -107,7 +106,7 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(144, 82);
+            this.textBox2.Location = new System.Drawing.Point(103, 82);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(311, 20);
             this.textBox2.TabIndex = 5;
@@ -124,7 +123,7 @@
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(144, 118);
+            this.comboBox1.Location = new System.Drawing.Point(103, 118);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(134, 21);
             this.comboBox1.TabIndex = 7;
@@ -143,7 +142,7 @@
             // comboBox2
             // 
             this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(144, 155);
+            this.comboBox2.Location = new System.Drawing.Point(103, 155);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(134, 21);
             this.comboBox2.TabIndex = 9;
@@ -162,26 +161,17 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(15, 226);
+            this.button2.Location = new System.Drawing.Point(310, 249);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(101, 41);
+            this.button2.Size = new System.Drawing.Size(104, 47);
             this.button2.TabIndex = 10;
-            this.button2.Text = "Load Environment XML";
+            this.button2.Text = "LOAD TEST XML";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(15, 273);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(101, 44);
-            this.button3.TabIndex = 11;
-            this.button3.Text = "Load Services XML";
-            this.button3.UseVisualStyleBackColor = true;
-            // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(314, 118);
+            this.button4.Location = new System.Drawing.Point(329, 118);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(85, 58);
             this.button4.TabIndex = 12;
@@ -193,9 +183,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(524, 430);
+            this.ClientSize = new System.Drawing.Size(426, 316);
             this.Controls.Add(this.button4);
-            this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.comboBox2);
             this.Controls.Add(this.label4);
@@ -207,9 +196,11 @@
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.menuStrip1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "RESTtest v1.0 BETA";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -232,7 +223,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox comboBox2;
         private System.Diagnostics.Process process1;
-        private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button4;
     }

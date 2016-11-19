@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Windows.Forms;
 using RESTtest.Models;
+using System.Text;
 
 namespace RESTtest.Library
 {
@@ -12,12 +13,32 @@ namespace RESTtest.Library
     /// </summary>
     class Rest
     {
+
         public string accept { get; set; }
+
+        /// <summary>
+        /// Methid
+        /// Ex: GET,POST,PUT,DELETE
+        /// </summary>
         public string method { get; set; }
+
+        /// <summary>
+        /// Url
+        /// Ex: http://example.com
+        /// </summary>
         public string url { get; set; }
+        
+        /// <summary>
+        /// Content type of the request
+        /// Ex: application/json
+        /// </summary>
         public string contentType { get; set; }
 
+        /// <summary>
+        /// Headers of the request
+        /// </summary>
         public Dictionary<string, string> header = new Dictionary<string, string>();
+
         /// <summary>
         /// Request Object
         /// 
@@ -67,34 +88,37 @@ namespace RESTtest.Library
         /// <returns></returns>
         public RestResponse RestGet()
         {
-            string s = null;
+            // encapsulate the response
             RestResponse res = new RestResponse();
 
             try
             {
+               
+                var start = DateTime.Now; // start timer
                 HttpWebResponse objResponse = (HttpWebResponse)request.GetResponse();
+                res.Duration = DateTime.Now - start; // end timer
+
                 // get the response in a stream and contain it in a string
                 using (StreamReader responseStream = new StreamReader(objResponse.GetResponseStream()))
                 {
-
-                    var start = DateTime.Now;
-                    res.Duration = DateTime.Now - start;
-
+                    // get the response
+                    // update RestResposne object
                     if (objResponse is HttpWebResponse) res.UpdateFrom(objResponse as HttpWebResponse);
                     var hresponse = (HttpWebResponse)objResponse;
 
-                  //  logger.Debug(hresponse.StatusDescription);
                     res.Success = true;
-
+                    res.Method = "GET";
                     responseStream.Close(); // close the stream
                 }
             }
-            catch (WebException we) // handle some exceptions
+            catch (WebException we) // handle exceptions but no mater what update the RestResposne object
             {
-                //if (we.Response is HttpWebResponse) res.UpdateFrom(we.Response as HttpWebResponse);
-                //res.Message = we.Message;
-                //res.Success = false;
+                // update the RestResponse object
+                if (we.Response is HttpWebResponse) res.UpdateFrom(we.Response as HttpWebResponse);
+                res.Message = we.Message;
+                res.Success = false;
 
+                // Show to user
                 var response = we.Response as HttpWebResponse;
                 if (response == null)
                     throw;
@@ -110,11 +134,17 @@ namespace RESTtest.Library
         /// Makes a Request to the API POST
         /// </summary>
         /// <param name="json"></param>
-        public System.String RestPost(string json)
+        public RestResponse RestPost(string json)
         {
-            System.String result = null;
+            // encapsulate the response
+            RestResponse res = new RestResponse();
+            // set the content type
+            // request.ContentType = "application/x-www-form-urlencoded";
+            request.ContentType = "application/json";
+
             try
             {
+                // get the request stream 
                 using (var streamWriter = new StreamWriter(request.GetRequestStream()))
                 {
                     streamWriter.Write(json);
@@ -122,14 +152,24 @@ namespace RESTtest.Library
                     streamWriter.Close();
                 }
 
+                var start = DateTime.Now; // start timer
                 var httpResponse = (HttpWebResponse)request.GetResponse();
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-                {
-                    result = streamReader.ReadToEnd();
-                }
+                res.Duration = DateTime.Now - start; // end timer
+                // get the response
+                // update RestResposne object
+                if (httpResponse is HttpWebResponse) res.UpdateFrom(httpResponse as HttpWebResponse);
+                var hresponse = (HttpWebResponse)httpResponse;
+
+                res.Success = true;
+                res.Method = "POST";
             }
-            catch (WebException we)
+            catch (WebException we)// handle exceptions but no mater what update the RestResposne object
             {
+                // update the RestResponse object    
+                if (we.Response is HttpWebResponse) res.UpdateFrom(we.Response as HttpWebResponse);
+                res.Message = we.Message;
+                res.Success = false;
+                // Show to user
                 var response = we.Response as HttpWebResponse;
                 if (response == null)
                     throw;
@@ -138,7 +178,7 @@ namespace RESTtest.Library
                    Convert.ToString(response));
             }
 
-            return result;
+            return res;
         }
 
     

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using RESTtest.Databse;
 using RESTtest.Library;
 using RESTtest.Models;
 using System;
@@ -35,9 +36,16 @@ namespace RESTtest.Forms
         public string sw { get; set; }
 
         public string  url { get; set; }
+
         public string  method { get; set; }
+
         public string type { get; set; }
+
         public string data { get; set; }
+        public string baseUrl { get; set; }
+
+        public string controller { get; set; }
+
 
         private RestResponse response;
 
@@ -86,6 +94,7 @@ namespace RESTtest.Forms
         private void button1_Click(object sender, EventArgs e)
         {
             Rest rest = null;
+            UpdateRequest u = new UpdateRequest(); // Update Database
 
             if (sw == "manual")
             {
@@ -108,7 +117,7 @@ namespace RESTtest.Forms
                         progressBar1.Value = 30;
                         rest = new Rest("*/*", this.method, this.url, this.type, this.headers);
                         progressBar1.Value = 70;
-                      //  this.response = rest.RestPost(this.data);
+                        this.response = rest.RestPost(this.data);
                         progressBar1.Value = 100;
                         var p = JsonConvert.SerializeObject(this.response, Formatting.Indented);
                         this.textBox1.Clear();
@@ -122,9 +131,17 @@ namespace RESTtest.Forms
                         break;
 
                 }
+                RestRequest r = new RestRequest();
+                r.url = this.baseUrl;
+                r.method = this.method;
+                r.header = this.headers;
+                r.controller = this.controller;
+                u.CreateRequest(r);
+                requests.Clear(); // clear the requests
             }
-            else if (sw == "automatic")
+            else if (sw == "automatic") // if loaded from XML
             {
+                // go to eache request and send it 
                 foreach(var l in requests)
                 {
                     string url = l.url + "/" + l.controller;
@@ -141,8 +158,6 @@ namespace RESTtest.Forms
                         this.textBox2.Text = url;
                         this.textBox3.Text = l.method;
                         this.textBox4.Text = l.type;
-
-                        //   this.textBox1.Clear();
                         this.textBox1.Text += g;
                     }
                     else if (l.method == "POST")
@@ -150,13 +165,13 @@ namespace RESTtest.Forms
                         progressBar1.Value = 30;
                         rest = new Rest("*/*", l.method, url, this.type, l.header);
                         progressBar1.Value = 70;
-                     //   this.response = rest.RestPost(l.json_data);
+                        this.response = rest.RestPost(l.json_data);
                         progressBar1.Value = 100;
                         var p = JsonConvert.SerializeObject(this.response, Formatting.Indented);
-                        this.textBox1.Clear();
-                        this.textBox1.Text = p;
+                        this.textBox1.Text += p;
                     }
                 }
+                requests.Clear(); // clear the requests
             }     
         }
 
@@ -168,6 +183,7 @@ namespace RESTtest.Forms
         /// <param name="e"></param>
         private void Send_Load(object sender, EventArgs e)
         {
+            // If Manually entered data in the fields
             if (sw == "manual")
             {
                 this.textBox2.Text = this.url;
@@ -200,8 +216,9 @@ namespace RESTtest.Forms
                     this.textBox1.Text += data + "\r\n";
                 }
             }
-            else if (sw == "automatic")
-            {
+            else if (sw == "automatic") // If loaded from XML
+            {   
+                // Load the first request 
                 string url = requests[0].url + "/" + requests[0].controller;
                 this.textBox2.Text = url;
                 this.textBox3.Text = requests[0].method;

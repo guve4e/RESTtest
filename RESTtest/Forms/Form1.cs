@@ -12,6 +12,7 @@ using RESTtest.Library;
 using RESTtest.Forms;
 using System.Diagnostics;
 using System.Xml.Linq;
+using RESTtest.Databse;
 
 namespace RESTtest
 {
@@ -135,6 +136,11 @@ namespace RESTtest
             Make_Object form = new Make_Object("headers");
             form.Text = "Make Headers";
             form.Show();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            Database d = new Database();
         }
     }
 }

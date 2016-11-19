@@ -26,6 +26,7 @@ namespace RESTtest.Models
             this.controller = controller;
             this.method = method;
             this.type = type;
+            this.json_data = body;
         }
     }
 }

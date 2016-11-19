@@ -71,7 +71,7 @@ namespace RESTtest
         public Form1()
         {
             this.contentType = "application/json";
-            this.showMakeObject = false;
+            this.showMakeObject = true;
 
             // initialize  
             InitializeComponent();
@@ -139,11 +139,12 @@ namespace RESTtest
                     }
                     // check if data is null!!!
                     this.method = "POST";
-                    this.showMakeObject = false;
+                    this.showMakeObject = true;
 
                     break;
                 case "GET":
                     this.method = "GET";
+                    this.showMakeObject = true;
                     break;
             }
         }
@@ -200,13 +201,20 @@ namespace RESTtest
         {
             UpdateRequest db = new UpdateRequest();
             rest = db.GetLastUpdatedRowIdRequest();
-            json_data = JsonConvert.SerializeObject(rest.json_data, Formatting.Indented);
+            //json_data = JsonConvert.SerializeObject(rest.json_data, Formatting.Indented);
+            data.Clear();
+            data = JsonConvert.DeserializeObject<Dictionary<string, string>>(rest.json_data);
             headers = rest.header;
             this.textBox1.Text = rest.url;
             this.textBox2.Text = rest.controller;
-            this.comboBox1.Text = rest.method;
-          
 
+            // if database is empty
+            if (!(rest.url == ""))
+            {
+                this.showMakeObject = false;
+            }
+            
+            this.comboBox1.Text = rest.method;
         }
     }
 }

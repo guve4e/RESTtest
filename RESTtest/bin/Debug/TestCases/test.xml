@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<runbook base="http://carstuff.ddns.net/nissan-back-end/controller.php">
+  <variables>
+    <var id="trader" value=""  />
+    <var id="client" value=""  />
+  </variables>
+  <header-all>
+    <header id="API-Token" value="Kjbd43n#4hvsoyjYSk1!UIerJdS073%dfrR" />
+  </header-all>
+
+  <sequence id="user" >
+    <test src="test/Test" />
+   	<test src="test/Test2" />
+   	<test src="test/Test3" />
+   	<test src="test/Test4" />
+   	<test src="test/Test5" />
+   	<test src="test/Test6" />
+   	<test src="test/Test7" />
+  </sequence>
+  
+</runbook>
+

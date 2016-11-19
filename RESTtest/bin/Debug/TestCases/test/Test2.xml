@@ -1,0 +1,19 @@
+<rest type="POST" url="Test">
+  <data>
+     {
+      "to" : "bk3RNwTe3H0:CI2k_HHwgIpoDKCIZvvDMExUdFQ3P1",
+      "data" : {
+       "key" : "value"
+      },
+    }
+  </data>
+  <result code="204" type="">
+    {
+      "type": "object",
+      "properties": {
+        "status": { "type": "string" }
+       },
+       "required": ["status"]            
+    }
+  </result>
+</rest>

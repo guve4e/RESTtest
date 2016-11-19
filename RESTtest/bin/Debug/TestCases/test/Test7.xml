@@ -1,0 +1,20 @@
+<rest type="GET" url="Test">
+  <result code="200" type="application/json; charset=utf-8">
+    {
+      "type": "array",
+      "items": {
+          "title": "RecentTransactions",
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer" },
+            "type": { "type": "string" },
+            "remain": { "type": "integer" },
+            "name": { "type": "string" },
+            "offer": { "type": "number" }
+          },
+          "required": ["id", "type", "remain", "name", "offer"]     
+        },
+        "minItems": 1
+    }
+  </result>
+</rest>

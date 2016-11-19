@@ -139,6 +139,7 @@ namespace RESTtest.Library
             // encapsulate the response
             RestResponse res = new RestResponse();
             // set the content type
+
             // request.ContentType = "application/x-www-form-urlencoded";
             request.ContentType = "application/json";
 

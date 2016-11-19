@@ -1,28 +1,17 @@
-﻿CREATE TABLE Request (
-	R_ID INT PRIMARY KEY IDENTITY(100,1),
-	R_URL VARCHAR(255) NOT NULL,
-	R_METHOD VARCHAR(16) NOT NULL,
-	R_DATE DATE NOT NULL,
-	R_CONTROLLER VARCHAR(255) NOT NULL,
-	R_PARAMETERS VARCHAR(255) NOT NULL,
-	R_BODY TEXT
-);
-
-CREATE TABLE Header (
-	R_ID INT NOT NULL,
-	H_ID INT PRIMARY KEY IDENTITY(100,1),
-	H_KEY VARCHAR(255) NOT NULL,
-	H_VALUE VARCHAR(255) NOT NULL
-);
-
-Drop table Header;
-Drop table Request;
+﻿ SELECT * FROM Request
+ JOIN Header ON Request.R_ID = Header.R_ID
+ WHERE R_DATE=(SELECT max(R_DATE) FROM Request);
 
 
-
-
-Select * from Request;
-
-
-INSERT INTO Request (R_URL,R_METHOD, R_CONTROLLER, R_PARAMETERS, R_BODY, R_DATE)
-VALUES('http//example.com','POST','Test','','{[]}','12/12/12');
+-- Extract Request's ID from Request Table
+DECLARE @ID INTEGER;
+SELECT @ID = R_ID FROM Request
+WHERE R_DATE=(SELECT max(R_DATE) FROM Request);
+         
+-- Get the Row            
+SELECT * FROM Request
+WHERE R_DATE=(SELECT max(R_DATE) FROM Request);
+                
+-- Get Headers
+SELECT * FROM Header
+WHERE R_ID = @ID;

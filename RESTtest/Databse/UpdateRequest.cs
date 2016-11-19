@@ -34,11 +34,15 @@ namespace RESTtest.Databse
                
             try
             {
+                // update Request first
                 this.db.Open(); // open database
                 SqlCommand cmd = MakeSQLCommand(sql);
                 // execute
                 success = ExecuteActionQuery(sql);
                 this.db.Close();
+
+                // get the Id of the added Request
+                // update Header
                 RestRequest r = GetLastUpdatedRowIdRequest();
                 int r_id = r.id;
                 this.db.Open();
@@ -79,23 +83,35 @@ namespace RESTtest.Databse
         public RestRequest GetLastUpdatedRowIdRequest()
         {
             RestRequest r = null;
+            Dictionary<string, string> headers = new Dictionary<string, string>();
 
-            string u_id = "";
+            int u_id = -1;
             string r_url = "";
-            string  r_method = "";
+            string r_method = "";
             string r_controller = "";
             string r_parameters = "";
             string r_body = "";
 
-            int id = -1;
             // query
-            string sql = string.Format(@" 
+            string sql = string.Format(@"
+
+                    -- Extract Request's ID from Request Table
+                    DECLARE @ID INTEGER;
+                    SELECT @ID = R_ID FROM Request
+                    WHERE R_DATE=(SELECT max(R_DATE) FROM Request);
+         
+                    -- Get the Row            
                     SELECT * FROM Request
-                    WHERE R_DATE=(SELECT max(R_DATE) FROM Request);");
+                    WHERE R_DATE=(SELECT max(R_DATE) FROM Request);
+                
+                    -- Get Headers
+                    SELECT * FROM Header
+                    WHERE R_ID = @ID;
+
+            ");
 
             try
             {
-
                 db.Open(); // open database
                 SqlCommand cmd = MakeSQLCommand(sql);
                 // execute
@@ -103,14 +119,13 @@ namespace RESTtest.Databse
                 DataSet ds = new DataSet();
                 adapter.Fill(ds); // fill adapter
 
-            
                 DateTime r_date;
                 string date = "";
 
-                // Collect User attributes
+                // Collect Request attributes
                 foreach (DataRow row in ds.Tables[0].Rows)
                 {
-                    u_id = Convert.ToString(row["R_ID"]);
+                    u_id = Convert.ToInt32(row["R_ID"]);
                     r_url = Convert.ToString(row["R_URL"]);
                     r_method = Convert.ToString(row["R_METHOD"]);
                     r_date = Convert.ToDateTime(row["R_DATE"]);
@@ -121,8 +136,17 @@ namespace RESTtest.Databse
                    
                 }
 
-                // encapsulate user
+                // Collect Headers attributes
+                foreach (DataRow row in ds.Tables[1].Rows)
+                {
+                    string key = Convert.ToString(row["H_KEY"]);
+                    string value = Convert.ToString(row["H_VALUE"]);
+                    headers.Add(key, value);
+                }
+
+                // encapsulate request
                 r = new RestRequest(u_id, r_url, r_method, date, r_body, r_controller, r_parameters);
+                r.header = headers;
             }
             catch (Exception ex)
             {

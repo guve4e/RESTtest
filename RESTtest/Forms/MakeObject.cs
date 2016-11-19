@@ -32,9 +32,11 @@ namespace RESTtest.Forms
         private int value_count { set; get; }
 
         /// <summary>
+        /// Dictionary 
+        /// To hold Key-Value pair
         /// 
         /// </summary>
-        private Dictionary<TextBox,TextBox> d = new Dictionary<TextBox,TextBox>();
+        private Dictionary<TextBox,TextBox> dictionary = new Dictionary<TextBox,TextBox>();
         
         /// <summary>
         /// Constructor
@@ -52,6 +54,11 @@ namespace RESTtest.Forms
    
         }
 
+        /// <summary>
+        /// Add Object
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
             TextBox textBoxKey = new System.Windows.Forms.TextBox();
@@ -103,7 +110,7 @@ namespace RESTtest.Forms
             this.Controls.Add(flowLayoutPanel1);
 
            // add text data to dictionary
-            d.Add(textBoxKey, textBoxValue);
+            dictionary.Add(textBoxKey, textBoxValue);
 
         }
 
@@ -120,9 +127,9 @@ namespace RESTtest.Forms
             // CAREFULL HERE value_count may be -1;
             if (value_count > -1)
             {
-                // Collect the values from the text fields and
-                // insert them in the dict dictionary
-                 foreach (var v in d)
+                // collect the values from the text fields and
+                // insert them in the dictionary 
+                 foreach (var v in dictionary)
                  {
                      string key = v.Key.Text.ToString();
                      string value = v.Value.Text.ToString();
@@ -137,7 +144,7 @@ namespace RESTtest.Forms
             }
         
             
-            switch (this.sw)
+            switch (this.sw) 
             {
                 case "data": // if called to make JSON object
                     Form1.data = dict;

@@ -18,7 +18,15 @@ using RESTtest.Models;
 namespace RESTtest
 {
     public partial class Form1 : Form
-    {   
+    {
+        /// <summary>
+        /// Holds JSON Data
+        /// Equivalent to data dictionary
+        /// but in different form.
+        /// 
+        /// </summary>
+        public string json_data { get; set; }
+
         /// <summary>
         /// Global Static
         /// holds JSON Data
@@ -28,25 +36,55 @@ namespace RESTtest
         /// <summary>
         /// Global, Static
         /// Headers
+        /// 
         /// </summary>
         public static Dictionary<string, string> headers = new Dictionary<string, string>();
 
-
+        /// <summary>
+        /// Method
+        /// 
+        /// </summary>
         public string method { get; set; }
+
+        /// <summary>
+        /// Content type
+        /// 
+        /// </summary>
         public string contentType { get; set; }
+        
+        /// <summary>
+        /// RestRequest Object
+        /// 
+        /// </summary>
+        public RestRequest rest { get; set; }
 
+        /// <summary>
+        /// Switch Variable
+        /// If true it shows MakeObject Form
+        /// 
+        /// </summary>
+        public bool showMakeObject { get; set; }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public Form1()
         {
             this.contentType = "application/json";
+            this.showMakeObject = false;
+
+            // initialize  
             InitializeComponent();
+
             // initialize comboBox1
             this.comboBox1.Items.Add("GET");
             this.comboBox1.Items.Add("POST");
             this.comboBox1.Items.Add("PUT");
+            this.comboBox1.Items.Add("DELETE");
             // initialize comboBox2
             this.comboBox2.Items.Add("application/json");
-            
+            this.comboBox2.Items.Add("application/x-www-form-urlencoded");
+
         }
 
         /// <summary>
@@ -60,7 +98,6 @@ namespace RESTtest
 
             if (this.textBox1 != null && this.textBox2 != null && 
                 this.comboBox1.SelectedItem != null && this.comboBox2.SelectedItem != null)
-
             {
               
                 string url = this.textBox1.Text.ToString();
@@ -69,7 +106,7 @@ namespace RESTtest
 
 
                 Send s = new Forms.Send(fullUrl, method, this.contentType,data,headers,"manual");
-                s.baseUrl = url; // update url
+                s.baseUrl = url; // update URL
                 s.controller = controller; // update controller 
                 s.Show();
             }
@@ -80,18 +117,30 @@ namespace RESTtest
 
         }
 
+        /// <summary>
+        /// Combo Box 1
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            // if selected
             string selectedItem = (string)comboBox1.SelectedItem;
-
+            // switch
             switch (selectedItem)
             {
                 case "POST":
-                    Make_Object form = new Make_Object("data");
-                    form.Text = "Make JSON String";
-                    form.Show();
+                    if (this.showMakeObject)
+                    {
+                        Make_Object form = new Make_Object("data");
+                        form.Text = "Make JSON String";
+                        form.Show();
+                    }
                     // check if data is null!!!
                     this.method = "POST";
+                    this.showMakeObject = false;
+
                     break;
                 case "GET":
                     this.method = "GET";
@@ -141,12 +190,22 @@ namespace RESTtest
             form.Show();
         }
 
+        /// <summary>
+        /// On Load
+        /// It executes first
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Form1_Load(object sender, EventArgs e)
         {
             UpdateRequest db = new UpdateRequest();
-            RestRequest r = db.GetLastUpdatedRowIdRequest();
-            this.textBox1.Text = r.url;
-            this.textBox2.Text = r.controller;
+            rest = db.GetLastUpdatedRowIdRequest();
+            json_data = JsonConvert.SerializeObject(rest.json_data, Formatting.Indented);
+            headers = rest.header;
+            this.textBox1.Text = rest.url;
+            this.textBox2.Text = rest.controller;
+            this.comboBox1.Text = rest.method;
+          
 
         }
     }

@@ -131,11 +131,14 @@ namespace RESTtest.Forms
                         break;
 
                 }
+
+                // update database with this request
                 RestRequest r = new RestRequest();
                 r.url = this.baseUrl;
                 r.method = this.method;
                 r.header = this.headers;
                 r.controller = this.controller;
+                r.json_data = this.data;
                 u.CreateRequest(r);
                 requests.Clear(); // clear the requests
             }

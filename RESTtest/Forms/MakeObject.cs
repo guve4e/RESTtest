@@ -125,7 +125,7 @@ namespace RESTtest.Forms
 
 
             // CAREFULL HERE value_count may be -1;
-            if (value_count > -1)
+            if (value_count > -1 && (dict.Count > 0))
             {
                 // collect the values from the text fields and
                 // insert them in the dictionary 

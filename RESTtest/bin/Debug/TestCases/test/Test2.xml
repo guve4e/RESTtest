@@ -11,9 +11,10 @@
     {
       "type": "object",
       "properties": {
-        "status": { "type": "string" }
+        "name": { "type": "string" },
+        "occupation": { "type": "string" }
        },
-       "required": ["status"]            
+       "required": ["name"]            
     }
   </result>
 </rest>

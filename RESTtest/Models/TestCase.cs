@@ -67,11 +67,18 @@ namespace RESTtest.Models
             }
         }
 
+        /// <summary>
+        /// Parse Tests XML
+        /// 
+        /// </summary>
+        /// <param name="tid"></param>
         public void Execute(string tid)
         {
-           
+
+            ExpectedResponse eres;
             string rtype = xdoc.Root.Attribute("type").Value;
      
+            // collect information to encapsulate request
             RestRequest request = new RestRequest();
             request.url = this.url;
             request.controller = this.controller;
@@ -80,8 +87,27 @@ namespace RESTtest.Models
             if (data != null)
             {
                 request.json_data = data.ToString();
-            }   
+            }
 
+            try
+            {
+                // parse
+                var xresult = xdoc.Root.Element("result");
+                string code = Tools.Attr(xresult, "code");
+                HttpCode = Convert.ToInt32(code);
+                ContentType = Tools.Attr(xresult, "type");
+                schema = JSchema.Parse(xresult.Value);
+                eres = new ExpectedResponse(code, HttpCode, ContentType, schema);
+                // update the expected response member in RestRequest class
+                request.response = eres;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+            
+
+            // load the requests
             LoadXML.requests.Add(request);
          
         }

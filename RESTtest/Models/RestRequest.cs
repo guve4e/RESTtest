@@ -16,6 +16,8 @@ namespace RESTtest.Models
 
         public Dictionary<string, string> header = new Dictionary<string, string>();
 
+        public ExpectedResponse response { get; set; }
+
         public string json_data { get; set; }
 
         public RestRequest() { }

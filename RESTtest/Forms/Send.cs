@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RESTtest.Databse;
 using RESTtest.Library;
 using RESTtest.Models;
@@ -133,6 +134,7 @@ namespace RESTtest.Forms
                 }
 
                 // update database with this request
+                // update database works only if fields are field manually
                 RestRequest r = new RestRequest();
                 r.url = this.baseUrl;
                 r.method = this.method;
@@ -144,7 +146,8 @@ namespace RESTtest.Forms
             }
             else if (sw == "automatic") // if loaded from XML
             {
-                // go to eache request and send it 
+                // go trough each request and send it
+                // then check and validate the JSON Schema 
                 foreach(var l in requests)
                 {
                     string url = l.url + "/" + l.controller;
@@ -153,10 +156,22 @@ namespace RESTtest.Forms
                     {
                         progressBar1.Value = 30;
                         rest = new Rest("*/*", l.method, url, l.type, l.header);
+                        
                         progressBar1.Value = 70;
                         this.response = rest.RestGet();
                         progressBar1.Value = 100;
                         var g = JsonConvert.SerializeObject(this.response, Formatting.Indented);
+                        string sc = l.response.schema.ToString();
+                        JObject obj = JObject.Parse(g);
+                        IList<string> message;
+
+                        bool b = Tools.validateJson(sc, obj, out message);
+
+                        foreach(var m in message)
+                        {
+                            MessageBox.Show("Valid -> " + b + " " + m);
+                        }
+                        
 
                         this.textBox2.Text = url;
                         this.textBox3.Text = l.method;
@@ -171,6 +186,19 @@ namespace RESTtest.Forms
                         this.response = rest.RestPost(l.json_data);
                         progressBar1.Value = 100;
                         var p = JsonConvert.SerializeObject(this.response, Formatting.Indented);
+
+                        string sc = l.response.schema.ToString();
+                        JObject obj = JObject.Parse(p);
+
+                        IList<string> message;
+
+                        bool b = Tools.validateJson(sc, obj, out message);
+
+                        foreach (var m in message)
+                        {
+                            MessageBox.Show("Valid -> " + b + " " + m);
+                        }
+
                         this.textBox1.Text += p;
                     }
                 }

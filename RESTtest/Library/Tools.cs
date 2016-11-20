@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
 
 namespace RESTtest.Library
 {
@@ -46,5 +47,23 @@ namespace RESTtest.Library
         {
             throw new NotImplementedException();
         }
+
+
+        public static bool validateJson(string schema, JObject json, out IList<string> message)
+        {
+            // locals
+            IList<string> m;
+            bool valid = false;
+     
+            // parse
+            JSchema s = JSchema.Parse(schema);
+            // validate
+            valid = json.IsValid(s, out m);
+            // update messages
+            message = m;
+            // return
+            return valid;                
+        }
+
     }
 }

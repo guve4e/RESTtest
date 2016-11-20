@@ -95,7 +95,7 @@ namespace RESTtest
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
-
+            // check if all fields are field
             if (this.textBox1 != null && this.textBox2 != null && 
                 this.comboBox1.SelectedItem != null && this.comboBox2.SelectedItem != null)
             {
@@ -104,7 +104,7 @@ namespace RESTtest
                 string controller = this.textBox2.Text.ToString();
                 string fullUrl = url + "/" + controller;
 
-
+                // send packed information to Send form
                 Send s = new Forms.Send(fullUrl, method, this.contentType,data,headers,"manual");
                 s.baseUrl = url; // update URL
                 s.controller = controller; // update controller 
@@ -114,7 +114,6 @@ namespace RESTtest
             {
                 MessageBox.Show("Enter Valid information in the data");
             }
-
         }
 
         /// <summary>

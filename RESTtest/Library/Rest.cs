@@ -101,12 +101,13 @@ namespace RESTtest.Library
                 // get the response in a stream and contain it in a string
                 using (StreamReader responseStream = new StreamReader(objResponse.GetResponseStream()))
                 {
+                    res.Success = true; // if here no exception was thrown
                     // get the response
                     // update RestResposne object
                     if (objResponse is HttpWebResponse) res.UpdateFrom(objResponse as HttpWebResponse);
                     var hresponse = (HttpWebResponse)objResponse;
 
-                    res.Success = true;
+                    
                     res.Method = "GET";
                     responseStream.Close(); // close the stream
                 }
@@ -153,6 +154,8 @@ namespace RESTtest.Library
                     streamWriter.Close();
                 }
 
+                res.Success = true; // if here no exception was thrown
+
                 var start = DateTime.Now; // start timer
                 var httpResponse = (HttpWebResponse)request.GetResponse();
                 res.Duration = DateTime.Now - start; // end timer
@@ -160,8 +163,6 @@ namespace RESTtest.Library
                 // update RestResposne object
                 if (httpResponse is HttpWebResponse) res.UpdateFrom(httpResponse as HttpWebResponse);
                 var hresponse = (HttpWebResponse)httpResponse;
-
-                res.Success = true;
                 res.Method = "POST";
             }
             catch (WebException we)// handle exceptions but no mater what update the RestResposne object

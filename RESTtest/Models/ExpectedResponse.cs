@@ -9,18 +9,29 @@ namespace RESTtest.Models
 {
     public class ExpectedResponse
     {
+        /// <summary>
+        /// Expected code
+        /// </summary>
+        public string http_code { get; set; }
 
-        public string  code { get; set; }
-    
-        public int http_code { get; set; }
+        /// <summary>
+        /// Expected Content Type
+        /// </summary>
         public string content_type { get; set; }
 
+        /// <summary>
+        /// Expected JSON schema
+        /// </summary>
         public JSchema schema { get; set; }
          
-
-        public ExpectedResponse (string code, int http_code, string content_type, JSchema schema)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="http_code"></param>
+        /// <param name="content_type"></param>
+        /// <param name="schema"></param>
+        public ExpectedResponse (string http_code, string content_type, JSchema schema)
         {
-            this.code = code;
             this.http_code = http_code;
             this.content_type = content_type;
             this.schema = schema;

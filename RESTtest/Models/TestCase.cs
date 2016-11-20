@@ -44,7 +44,7 @@ namespace RESTtest.Models
                 url = parent.url;
                 xdoc = XDocument.Load(fname);
                 this.controller = xdoc.Root.Attribute("url").Value;
-                this.method = xdoc.Root.Attribute("type").Value;
+                this.method = xdoc.Root.Attribute("method").Value;
                 // if POST, PUT, DELETE
                 if (method == "POST")
                 {
@@ -76,7 +76,6 @@ namespace RESTtest.Models
         {
 
             ExpectedResponse eres;
-            string rtype = xdoc.Root.Attribute("type").Value;
      
             // collect information to encapsulate request
             RestRequest request = new RestRequest();
@@ -84,20 +83,21 @@ namespace RESTtest.Models
             request.controller = this.controller;
             request.method = this.method;
             request.header = book.headers;
+
             if (data != null)
             {
                 request.json_data = data.ToString();
             }
 
-            try
+            try // parse the JSON schema / the expected return format
             {
                 // parse
-                var xresult = xdoc.Root.Element("result");
+                var xresult = xdoc.Root.Element("schema");
                 string code = Tools.Attr(xresult, "code");
                 HttpCode = Convert.ToInt32(code);
                 ContentType = Tools.Attr(xresult, "type");
                 schema = JSchema.Parse(xresult.Value);
-                eres = new ExpectedResponse(code, HttpCode, ContentType, schema);
+                eres = new ExpectedResponse(code, ContentType, schema);
                 // update the expected response member in RestRequest class
                 request.response = eres;
             }

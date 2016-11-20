@@ -36,20 +36,46 @@ namespace RESTtest.Forms
         /// </summary>
         public string sw { get; set; }
 
+        /// <summary>
+        /// URL
+        /// </summary>
         public string  url { get; set; }
 
+        /// <summary>
+        /// Method 
+        /// Ex: GET,POST,DELETE,PUT
+        /// 
+        /// </summary>
         public string  method { get; set; }
 
+        /// <summary>
+        /// Type
+        /// </summary>
         public string type { get; set; }
 
+        /// <summary>
+        /// Data to be sent
+        /// </summary>
         public string data { get; set; }
+
+        /// <summary>
+        /// URL the base of the API URL
+        /// </summary>
         public string baseUrl { get; set; }
 
+        /// <summary>
+        /// Controller
+        /// </summary>
         public string controller { get; set; }
 
-
+        /// <summary>
+        ///  Rest Response
+        /// </summary>
         private RestResponse response;
 
+        /// <summary>
+        /// List of all requests
+        /// </summary>
         public List<RestRequest> requests = new List<RestRequest>();
 
         /// <summary>
@@ -89,6 +115,10 @@ namespace RESTtest.Forms
 
         /// <summary>
         /// SEND button
+        /// Switches sw variable
+        /// It does different things
+        /// corresponding to the sw variable
+        ///
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -97,13 +127,13 @@ namespace RESTtest.Forms
             Rest rest = null;
             UpdateRequest u = new UpdateRequest(); // Update Database
 
-            if (sw == "manual")
+            if (sw == "manual") // manually filed fields
             {
-                switch (this.method)
+                switch (this.method) // switch method
                 {
                     case "GET":
-                       
                         progressBar1.Value = 30;
+                        // RestCall
                         rest = new Rest("*/*", this.method, this.url, this.type, this.headers);
                         progressBar1.Value = 70;
                         this.response = rest.RestGet();
@@ -116,6 +146,7 @@ namespace RESTtest.Forms
                         break;
                     case "POST":
                         progressBar1.Value = 30;
+                        // RestCall
                         rest = new Rest("*/*", this.method, this.url, this.type, this.headers);
                         progressBar1.Value = 70;
                         this.response = rest.RestPost(this.data);
@@ -127,8 +158,10 @@ namespace RESTtest.Forms
                         Form1.data.Clear();
                         break;
                     case "PUT":
+                        // to do
                         break;
                     case "DELETE":
+                        //to do
                         break;
 
                 }
@@ -150,57 +183,81 @@ namespace RESTtest.Forms
                 // then check and validate the JSON Schema 
                 foreach(var l in requests)
                 {
-                    string url = l.url + "/" + l.controller;
+                    // combine URL + controller
+                    string uri = l.url + "/" + l.controller; // combine 
 
+                    // switch methods
                     if (l.method == "GET")
                     {
                         progressBar1.Value = 30;
-                        rest = new Rest("*/*", l.method, url, l.type, l.header);
-                        
+                        // RestCall
+                        rest = new Rest("*/*", l.method, uri, l.type, l.header);
                         progressBar1.Value = 70;
+                        // make GET request
                         this.response = rest.RestGet();
                         progressBar1.Value = 100;
+                        // make JSON from response
                         var g = JsonConvert.SerializeObject(this.response, Formatting.Indented);
-                        string sc = l.response.schema.ToString();
-                        JObject obj = JObject.Parse(g);
-                        IList<string> message;
 
-                        bool b = Tools.validateJson(sc, obj, out message);
-
-                        foreach(var m in message)
+                        try
                         {
-                            MessageBox.Show("Valid -> " + b + " " + m);
+                            // extract the schema from the requests list
+                            string sc = l.response.schema.ToString();
+                            // convert to JObject
+                            JObject obj = JObject.Parse(g);
+                            // List to collect the response messages
+                            IList<string> message;
+                            // validate JSON and update message
+                            bool b = Tools.validateJson(sc, obj, out message);
+                            // go over the messages and print them on the screen
+                            foreach (var m in message)
+                            {
+                                MessageBox.Show("Valid -> " + b + " " + m);
+                            }
                         }
-                        
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
 
-                        this.textBox2.Text = url;
-                        this.textBox3.Text = l.method;
-                        this.textBox4.Text = l.type;
                         this.textBox1.Text += g;
                     }
                     else if (l.method == "POST")
                     {
                         progressBar1.Value = 30;
-                        rest = new Rest("*/*", l.method, url, this.type, l.header);
+                        rest = new Rest("*/*", l.method, uri, this.type, l.header);
                         progressBar1.Value = 70;
                         this.response = rest.RestPost(l.json_data);
                         progressBar1.Value = 100;
+                        // make JSON from response
                         var p = JsonConvert.SerializeObject(this.response, Formatting.Indented);
-
-                        string sc = l.response.schema.ToString();
-                        JObject obj = JObject.Parse(p);
-
-                        IList<string> message;
-
-                        bool b = Tools.validateJson(sc, obj, out message);
-
-                        foreach (var m in message)
+                        try
                         {
-                            MessageBox.Show("Valid -> " + b + " " + m);
+                            // extract the schema from the requests list
+                            string sc = l.response.schema.ToString();
+                            // convert to JObject
+                            JObject obj = JObject.Parse(p);
+                            // List to collect the response messages
+                            IList<string> message;
+                            // validate JSON and update message
+                            bool b = Tools.validateJson(sc, obj, out message);
+                            // go over the messages and print them on the screen
+                            foreach (var m in message)
+                            {
+                                MessageBox.Show("Valid -> " + b + " " + m);
+                            }
                         }
-
+                        catch(Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
                         this.textBox1.Text += p;
                     }
+
+                    // update fields
+                    this.textBox2.Text = uri;
+                    this.textBox3.Text = l.method;
+                    this.textBox4.Text = l.type;
                 }
                 requests.Clear(); // clear the requests
             }     
@@ -208,6 +265,9 @@ namespace RESTtest.Forms
 
         /// <summary>
         /// On Load
+        /// Switches sw variable
+        /// It does different things
+        /// corresponding to the sw variable
         /// 
         /// </summary>
         /// <param name="sender"></param>
@@ -220,7 +280,6 @@ namespace RESTtest.Forms
                 this.textBox2.Text = this.url;
                 this.textBox3.Text = this.method;
                 this.textBox4.Text = this.type;
-
 
                 // If headers
                 if (Form1.headers.Count > 0)
@@ -249,11 +308,18 @@ namespace RESTtest.Forms
             }
             else if (sw == "automatic") // If loaded from XML
             {   
-                // Load the first request 
-                string url = requests[0].url + "/" + requests[0].controller;
-                this.textBox2.Text = url;
-                this.textBox3.Text = requests[0].method;
-                this.textBox4.Text = requests[0].type;
+                try
+                {
+                    // Load the first request 
+                    string url = requests[0].url + "/" + requests[0].controller;
+                    this.textBox2.Text = url;
+                    this.textBox3.Text = requests[0].method;
+                    this.textBox4.Text = requests[0].type;
+                }
+                catch (IndexOutOfRangeException ex)
+                {
+                    MessageBox.Show("The format of XML is wrong!" + ex.Message);
+                }      
             }            
         }
 

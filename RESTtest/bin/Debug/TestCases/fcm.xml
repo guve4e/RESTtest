@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<runbook base="https://android.googleapis.com/gcm">
+<api base="https://android.googleapis.com/gcm">
   <variables>
     <var id="v1" value=""  />
     <var id="v2" value=""  />
   </variables>
-  <header-all>
+  <headers>
     <header id="Authorization" value="key=AIzaSyB1JJL0LnSdkMKy8ZXTz7AVNxNxver0qN8"/>
-  </header-all>
-  <sequence id="test" >
+  </headers>
+  <cases id="test" >
     <test src="fcm/Test" />
-  </sequence>
-</runbook>
+  </cases>
+</api>
 

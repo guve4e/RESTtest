@@ -67,11 +67,16 @@ namespace RESTtest.Models
             // understand and it will throw an exception
             if (this.Success)
             {
-               
+                try
+                {
+                    jdata = JObject.Parse(RawData);
+                }
+                catch (Newtonsoft.Json.JsonReaderException ex)
+                {
+                    Debug.WriteLine(ex);
+                    MessageBox.Show(ex.Message);
+                }
             }
-
-     
-
         }
 
 

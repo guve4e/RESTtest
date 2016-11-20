@@ -1,20 +1,17 @@
-<rest type="GET" url="Test">
-  <result code="200" type="application/json; charset=utf-8">
+<rest method="GET" url="Test">
+  <schema code="200" type="application/json; charset=utf-8">
     {
-      "type": "array",
+      "type": "object",
       "items": {
           "title": "RecentTransactions",
           "type": "object",
           "properties": {
-            "id": { "type": "integer" },
-            "type": { "type": "string" },
-            "remain": { "type": "integer" },
             "name": { "type": "string" },
-            "offer": { "type": "number" }
+            "occupation": { "type": "string" }
           },
-          "required": ["id", "type", "remain", "name", "offer"]     
+          "required": ["name"]     
         },
         "minItems": 1
     }
-  </result>
+  </schema>
 </rest>

@@ -17,7 +17,7 @@ namespace RESTtest.Library
         public string accept { get; set; }
 
         /// <summary>
-        /// Methid
+        /// Method
         /// Ex: GET,POST,PUT,DELETE
         /// </summary>
         public string method { get; set; }
@@ -108,7 +108,7 @@ namespace RESTtest.Library
                     var hresponse = (HttpWebResponse)objResponse;
 
                     
-                    res.Method = "GET";
+                    res.Method = this.method;
                     responseStream.Close(); // close the stream
                 }
             }
@@ -163,7 +163,7 @@ namespace RESTtest.Library
                 // update RestResposne object
                 if (httpResponse is HttpWebResponse) res.UpdateFrom(httpResponse as HttpWebResponse);
                 var hresponse = (HttpWebResponse)httpResponse;
-                res.Method = "POST";
+                res.Method = this.method;
             }
             catch (WebException we)// handle exceptions but no mater what update the RestResposne object
             {

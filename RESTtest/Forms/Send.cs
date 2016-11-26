@@ -158,9 +158,30 @@ namespace RESTtest.Forms
                         Form1.data.Clear();
                         break;
                     case "PUT":
-                        // to do
+                        progressBar1.Value = 30;
+                        // RestCall
+                        rest = new Rest("*/*", this.method, this.url, this.type, this.headers);
+                        progressBar1.Value = 70;
+                        this.response = rest.RestPost(this.data);
+                        progressBar1.Value = 100;
+                        var put = JsonConvert.SerializeObject(this.response, Formatting.Indented);
+                        this.textBox1.Clear();
+                        this.textBox1.Text = put;
+                        // clear the data dictionary
+                        Form1.data.Clear();
                         break;
                     case "DELETE":
+                        progressBar1.Value = 30;
+                        // RestCall
+                        rest = new Rest("*/*", this.method, this.url, this.type, this.headers);
+                        progressBar1.Value = 70;
+                        this.response = rest.RestPost(this.data);
+                        progressBar1.Value = 100;
+                        var del = JsonConvert.SerializeObject(this.response, Formatting.Indented);
+                        this.textBox1.Clear();
+                        this.textBox1.Text = del;
+                        // clear the data dictionary
+                        Form1.data.Clear();
                         //to do
                         break;
 
@@ -248,6 +269,68 @@ namespace RESTtest.Forms
                             }
                         }
                         catch(Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+                        this.textBox1.Text += p;
+                    }
+                    else if (l.method == "PUT")
+                    {
+                        progressBar1.Value = 30;
+                        rest = new Rest("*/*", l.method, uri, this.type, l.header);
+                        progressBar1.Value = 70;
+                        this.response = rest.RestPost(l.json_data);
+                        progressBar1.Value = 100;
+                        // make JSON from response
+                        var p = JsonConvert.SerializeObject(this.response, Formatting.Indented);
+                        try
+                        {
+                            // extract the schema from the requests list
+                            string sc = l.response.schema.ToString();
+                            // convert to JObject
+                            JObject obj = JObject.Parse(p);
+                            // List to collect the response messages
+                            IList<string> message;
+                            // validate JSON and update message
+                            bool b = Tools.validateJson(sc, obj, out message);
+                            // go over the messages and print them on the screen
+                            foreach (var m in message)
+                            {
+                                MessageBox.Show("Valid -> " + b + " " + m);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+                        this.textBox1.Text += p;
+                    }
+                    else if (l.method == "DELETE")
+                    {
+                        progressBar1.Value = 30;
+                        rest = new Rest("*/*", l.method, uri, this.type, l.header);
+                        progressBar1.Value = 70;
+                        this.response = rest.RestPost(l.json_data);
+                        progressBar1.Value = 100;
+                        // make JSON from response
+                        var p = JsonConvert.SerializeObject(this.response, Formatting.Indented);
+                        try
+                        {
+                            // extract the schema from the requests list
+                            string sc = l.response.schema.ToString();
+                            // convert to JObject
+                            JObject obj = JObject.Parse(p);
+                            // List to collect the response messages
+                            IList<string> message;
+                            // validate JSON and update message
+                            bool b = Tools.validateJson(sc, obj, out message);
+                            // go over the messages and print them on the screen
+                            foreach (var m in message)
+                            {
+                                MessageBox.Show("Valid -> " + b + " " + m);
+                            }
+                        }
+                        catch (Exception ex)
                         {
                             MessageBox.Show(ex.Message);
                         }

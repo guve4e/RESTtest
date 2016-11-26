@@ -104,7 +104,7 @@
     <Compile Include="Models\ExpectedResponse.cs" />
     <Compile Include="Models\RestRequest.cs" />
     <Compile Include="Models\RestResponse.cs" />
-    <Compile Include="Models\TestCase.cs" />
+    <Compile Include="Library\TestCase.cs" />
     <Compile Include="Models\Object.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

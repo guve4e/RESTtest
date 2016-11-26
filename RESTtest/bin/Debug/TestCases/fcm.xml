@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<api base="https://android.googleapis.com/gcm">
+<api base="http://carstuff.ddns.net/nissan-back-end/controller.php">
   <variables>
     <var id="v1" value=""  />
     <var id="v2" value=""  />

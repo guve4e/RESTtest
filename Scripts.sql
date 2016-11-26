@@ -15,11 +15,3 @@ CREATE TABLE Header (
 	H_VALUE VARCHAR(255) NOT NULL
 );
 
-Drop table Header;
-
-
-Select * from Request;
-
-
-INSERT INTO Request (R_URL,R_METHOD, R_CONTROLLER, R_PARAMETERS, R_BODY, R_DATE)
-VALUES('http//example.com','POST','Test','','{[]}','12/12/12');

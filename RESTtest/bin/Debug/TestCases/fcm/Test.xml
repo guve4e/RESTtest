@@ -1,4 +1,4 @@
-<rest method="POST" url="Test">
+<rest method="POST" controller="Test">
   <data>
     {
       "to" : "dTm4uGxgdwU:APA91bFUmvZAAB8ycXgy9_qHR2dswFSK4maQYZxHoI5Oeg5VOUAr77_mBKVAmponeco3JLh58k2tuyEozj-JpoluwzBAgoHCu5aFb1ZFpZLMN6gi5SL5VkrE2s-UoSxZPjDO_eqCSnaR",

@@ -28,14 +28,18 @@ namespace RESTtest
         public string json_data { get; set; }
 
         /// <summary>
-        /// List of request
+        /// List of requests
         /// Coming from Database
+        /// 
         /// </summary>
         public List<RestRequest> requests { get; set; }
 
         /// <summary>
         /// Global Static
         /// holds JSON Data
+        /// This dictionary will be send to
+        /// Send Form
+        /// 
         /// </summary>
         public static Dictionary<string, string> data = new Dictionary<string, string>();
 
@@ -105,13 +109,14 @@ namespace RESTtest
             if (this.textBox1 != null && this.textBox2 != null && 
                 this.comboBox1.SelectedItem != null && this.comboBox2.SelectedItem != null)
             {
-              
+                // extract info from textBoxes
                 string url = this.textBox1.Text.ToString();
                 string controller = this.textBox2.Text.ToString();
+                // construct url
                 string fullUrl = url + "/" + controller;
 
                 // send packed information to Send form
-                Send s = new Forms.Send(fullUrl, method, this.contentType,data,headers,"manual");
+                Send s = new Forms.Send(fullUrl, this.method, this.contentType,data,headers,"manual");
                 s.baseUrl = url; // update URL
                 s.controller = controller; // update controller 
                 s.Show();
@@ -130,9 +135,9 @@ namespace RESTtest
         /// <param name="e"></param>
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // if selected
+            // holds the selected item
             string selectedItem = (string)comboBox1.SelectedItem;
-            // switch
+            // switch the selectedItem
             switch (selectedItem)
             {
                 case "POST":
@@ -171,6 +176,7 @@ namespace RESTtest
 
         /// <summary>
         /// Load Environment XML 
+        /// 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -199,6 +205,7 @@ namespace RESTtest
         /// <summary>
         /// On Load
         /// It executes first
+        /// 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

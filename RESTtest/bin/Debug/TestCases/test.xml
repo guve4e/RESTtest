@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<api base="http://carstuff.ddns.net/nissan-back-end/controller.php">
+<api base="http://carstuff.ddns.net/web-api/index.php">
   <variables>
     <var id="v1" value=""  />
     <var id="v2" value=""  />
   </variables>
   <headers>
-    <header id="API-Token" value="Kjbd43n#4hvsoyjYSk1!UIerJdS073%dfrR" />
+    <header id="ApiToken" value="apppppppp" />
   </headers>
-  <cases id="Test" >
-    <test src="test/Test" />
+  <test-cases id="Test" >
    	<test src="test/TestGET" />
    	<test src="test/TestPOST" />
    	<test src="test/TestPUT" />
    	<test src="test/TestDELETE" />
-  </cases> 
+  </test-cases> 
 </api>
 

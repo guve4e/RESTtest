@@ -79,6 +79,10 @@ namespace RESTtest.Library
             {
                 MessageBox.Show("Exception in Rest Constructor " + we.Message);
             }
+            catch (Exception e)
+            {
+                MessageBox.Show("Exception in Rest Constructor " + e.Message);
+            }
 
         }
 

@@ -12,22 +12,61 @@ using Newtonsoft.Json.Schema;
 
 namespace RESTtest.Models
 {
+    /// <summary>
+    /// This class represents one Test Case
+    /// loaded from XML file in TestCases folder.
+    /// 
+    /// </summary>
     class TestCase
     {
-       
+        /// <summary>
+        /// 
+        /// </summary>
         private XDocument xdoc;
+
+        /// <summary>
+        /// 
+        /// </summary>
         private XDocument envdoc;
+
+        /// <summary>
+        /// LoadXML Object
+        /// 
+        /// 
+        /// </summary>
         private LoadXML book;
 
+        /// <summary>
+        /// 
+        /// </summary>
         private int HttpCode;
+
+        /// <summary>
+        /// 
+        /// </summary>
         private string ContentType;
+
+        /// <summary>
+        /// 
+        /// </summary>
         JSchema schema, data;
 
+        /// <summary>
+        /// 
+        /// </summary>
         private string url;
+
+        /// <summary>
+        /// 
+        /// </summary>
         private string method;
+
+        /// <summary>
+        /// 
+        /// </summary>
         private string controller;
 
-        internal Dictionary<string, string> headers = new Dictionary<string, string>();
+    //    internal Dictionary<string, string> headers = new Dictionary<string, string>();
 
         /// <summary>
         /// 
@@ -36,21 +75,31 @@ namespace RESTtest.Models
         /// <param name="fname">Name of Test Case file</param>
         public TestCase(LoadXML parent, string fname)
         {
-            book = parent;
+            // Load the LoadXML object to book
+            this.book = parent;
+
             try
             {
+                // Load XML Object from parent 
+                this.envdoc = parent.xenv;
 
-                envdoc = parent.xenv;
+                // Load url from parent
                 url = parent.url;
+
+                // Load the test case
                 xdoc = XDocument.Load(fname);
-                this.controller = xdoc.Root.Attribute("url").Value;
+                // Load controller
+                this.controller = xdoc.Root.Attribute("controller").Value;
+                // Load method
                 this.method = xdoc.Root.Attribute("method").Value;
+
                 // if POST, PUT, DELETE
-                if (method == "POST")
+                if (method == "POST" || method == "PUT" || method == "DELETE")
                 {
                     var d = xdoc.Root.Element("data");
                     data = JSchema.Parse(d.Value);
                 }
+               
                 var xresult = xdoc.Root.Element("result");
  
                 string codes = Tools.Attr(xresult, "code");
@@ -62,8 +111,7 @@ namespace RESTtest.Models
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex);
-               
+                Debug.WriteLine("Exception in TestCase: " + ex);
             }
         }
 

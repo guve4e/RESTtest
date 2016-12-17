@@ -28,16 +28,6 @@ namespace RESTtest.Library
         public string  file { get; set; }
 
         /// <summary>
-        /// XmlDoc
-        /// </summary>
-        public XmlDocument doc { get; set; }
-
-        /// <summary>
-        /// XML String
-        /// </summary>
-        public string xml { get; set; }
-
-        /// <summary>
         /// XML object 
         /// </summary>
         public XDocument xenv;
@@ -65,6 +55,8 @@ namespace RESTtest.Library
 
         /// <summary>
         /// Constructor
+        /// Loads the XML Object 
+        ///
         /// </summary>
         /// <param name="file"></param>
         public LoadXML(string file)
@@ -77,6 +69,7 @@ namespace RESTtest.Library
         /// <summary>
         /// Loads and Parses XML file
         /// Updates requests list
+        /// 
         /// </summary>
         public void Load()
         {
@@ -98,8 +91,9 @@ namespace RESTtest.Library
                 {
                     headers.Add(Tools.Attr(xhead, "id"), Tools.Attr(xhead, "value"));
                 }
-                // get Sequences
-                foreach (XElement xsq in xenv.Root.Elements("cases"))
+
+                // get test cases
+                foreach (XElement xsq in xenv.Root.Elements("test-cases"))
                 {
                     string id = Tools.Attr(xsq, "id"); // get id
 
@@ -107,6 +101,7 @@ namespace RESTtest.Library
                     {
                         string tid = xtest.Attribute("src").Value;
                         string f = xtest.Attribute("src").Value + ".xml";
+                        // TestCases is the name of the folder where the Test Cases suppose to be
                         string fname = "TestCases/" + f; 
                         if (!File.Exists(fname))
                         {

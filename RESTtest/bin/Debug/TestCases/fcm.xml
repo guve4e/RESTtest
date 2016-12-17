@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<api base="http://carstuff.ddns.net/nissan-back-end/controller.php">
+<api base="https://fcm.googleapis.com/fcm">
   <variables>
     <var id="v1" value=""  />
     <var id="v2" value=""  />
   </variables>
   <headers>
-    <header id="Authorization" value="key=AIzaSyB1JJL0LnSdkMKy8ZXTz7AVNxNxver0qN8"/>
+    <header id="Content-Type" value="application/json"/>
+    <header id="Authorization" value="key=AIzaSyCp3XtRjLf0KECuG9nW767xIgcCPOjKiAY"/>
   </headers>
   <cases id="test" >
     <test src="fcm/Test" />

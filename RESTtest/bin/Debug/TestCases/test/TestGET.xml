@@ -1,0 +1,12 @@
+<rest method="GET" controller="Test">
+  <schema code="204" type="">
+    {
+      "type": "object",
+      "properties": {
+        "method": { "type": "string" },
+        "message": { "type": "string" }
+       },
+       "required": ["method"]            
+    }
+  </schema>
+</rest>

@@ -47,7 +47,7 @@ namespace RESTtest.Models
         private string ContentType;
 
         /// <summary>
-        /// 
+        /// JSON Schema Objects
         /// </summary>
         JSchema schema, data;
 
@@ -84,29 +84,33 @@ namespace RESTtest.Models
                 this.envdoc = parent.xenv;
 
                 // Load url from parent
-                url = parent.url;
+                this.url = parent.url;
 
                 // Load the test case
-                xdoc = XDocument.Load(fname);
+                this.xdoc = XDocument.Load(fname);
                 // Load controller
                 this.controller = xdoc.Root.Attribute("controller").Value;
                 // Load method
                 this.method = xdoc.Root.Attribute("method").Value;
 
                 // if POST, PUT, DELETE
-                if (method == "POST" || method == "PUT" || method == "DELETE")
-                {
+                if (this.method == "POST" || this.method == "PUT" || this.method == "DELETE")
+                {   // get data and load it to JSON Object
                     var d = xdoc.Root.Element("data");
                     data = JSchema.Parse(d.Value);
                 }
-               
-                var xresult = xdoc.Root.Element("result");
- 
-                string codes = Tools.Attr(xresult, "code");
-                HttpCode = Convert.ToInt32(codes);
-
-                ContentType = Tools.Attr(xresult, "type");
-                schema = JSchema.Parse(xresult.Value);
+                 
+                // load the schema
+                var schema = xdoc.Root.Element("result");
+                // extract code
+                string codes = Tools.Attr(schema, "code");
+                // parse the http code to int
+                HttpCode = Int32.Parse(codes);
+                //  HttpCode = Convert.ToInt32(codes);
+                // extract content type
+                this.ContentType = Tools.Attr(schema, "type");
+                // load json schema
+                this.schema = JSchema.Parse(schema.Value);
               
             }
             catch (Exception ex)
@@ -142,7 +146,9 @@ namespace RESTtest.Models
                 // parse
                 var xresult = xdoc.Root.Element("schema");
                 string code = Tools.Attr(xresult, "code");
-                HttpCode = Convert.ToInt32(code);
+               // HttpCode = Convert.ToInt32(code);
+                // parse the http code to int
+                HttpCode = Int32.Parse(code);
                 ContentType = Tools.Attr(xresult, "type");
                 schema = JSchema.Parse(xresult.Value);
                 eres = new ExpectedResponse(code, ContentType, schema);

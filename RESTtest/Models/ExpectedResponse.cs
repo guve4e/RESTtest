@@ -36,9 +36,5 @@ namespace RESTtest.Models
             this.content_type = content_type;
             this.schema = schema;
         }
-    
-    
-
-
     }
 }

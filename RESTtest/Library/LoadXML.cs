@@ -19,38 +19,50 @@ namespace RESTtest.Library
     /// Load Information from XML
     /// Makes Lists of requests to be
     /// send to Sent Form for Processing
+    /// It contains TestCase object
+    /// 
     /// </summary>
     class LoadXML
     {
         /// <summary>
         /// File Path
+        /// 
         /// </summary>
         public string  file { get; set; }
 
         /// <summary>
-        /// XML object 
+        /// XML object loaded from XML file
+        /// 
         /// </summary>
         public XDocument xenv;
 
         /// <summary>
         /// The base of the URL
+        /// 
         /// </summary>
         public string url;
 
         /// <summary>
         /// Environmental Variables
+        /// 
         /// </summary>
         internal JObject envariables;
 
         /// <summary>
         /// Headers 
+        /// 
         /// </summary>
         internal Dictionary<string, string> headers = new Dictionary<string, string>();
 
         /// <summary>
         /// List to encapsulate all requests collected form the XML files
+        /// 
+        /// This list will be populated from TestCase class
+        /// after the class reads the test cases from XML file
+        /// and encapsulate them into requests objects
+        /// 
         /// </summary>
-        public static List<RestRequest> requests = new List<RestRequest>();
+        public static List<RestRequest> requests;
 
 
         /// <summary>
@@ -61,6 +73,9 @@ namespace RESTtest.Library
         /// <param name="file"></param>
         public LoadXML(string file)
         {
+            // 
+            requests = new List<RestRequest>();
+
             this.file = file;
             xenv = XDocument.Load(file);
 

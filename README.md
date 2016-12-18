@@ -19,4 +19,6 @@ Tool to test RESTful Web API BETA version
 * XML way: One file describes the web API to be tested (url,headers,environmental variables,etc.)
 * XML way: The other file describes different test cases(method,json string, etc.) 
 * XML way: This test XML files must be in a folder called "TestCases" in the same directory as the executable.
-* ![alt text](wiki/pics/)
+* UML Diagram  
+![alt text](RESTtest/wiki/pics/uml.jpg)
+ 

@@ -19,6 +19,8 @@ namespace RESTtest.Models
     /// </summary>
     class TestCase
     {
+        private static TestCase instance = null;
+
         /// <summary>
         /// 
         /// </summary>
@@ -66,8 +68,6 @@ namespace RESTtest.Models
         /// </summary>
         private string controller;
 
-    //    internal Dictionary<string, string> headers = new Dictionary<string, string>();
-
         /// <summary>
         /// 
         /// </summary>
@@ -101,7 +101,7 @@ namespace RESTtest.Models
                 }
                  
                 // load the schema
-                var schema = xdoc.Root.Element("result");
+                var schema = xdoc.Root.Element("schema");
                 // extract code
                 string codes = Tools.Attr(schema, "code");
                 // parse the http code to int
@@ -119,6 +119,17 @@ namespace RESTtest.Models
             }
         }
 
+        public static TestCase Instance(LoadXML parent, string fname)
+        { 
+            if (instance == null)
+            {
+                instance = new TestCase(parent,fname);
+            }
+            return instance;     
+        }
+
+
+
         /// <summary>
         /// Parse Tests XML
         /// 
@@ -126,7 +137,7 @@ namespace RESTtest.Models
         /// <param name="tid"></param>
         public void Execute(string tid)
         {
-
+            // 
             ExpectedResponse eres;
      
             // collect information to encapsulate request
@@ -157,11 +168,11 @@ namespace RESTtest.Models
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex);
+                Debug.WriteLine("Exception in Execute: " + ex);
             }
             
-
             // load the requests
+            // request is static List in LoadXML
             LoadXML.requests.Add(request);
          
         }

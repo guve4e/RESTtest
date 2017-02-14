@@ -100,6 +100,7 @@
     </Compile>
     <Compile Include="Library\LoadXML.cs" />
     <Compile Include="Library\Rest.cs" />
+    <Compile Include="Library\RestTestException.cs" />
     <Compile Include="Library\Tools.cs" />
     <Compile Include="Models\ExpectedResponse.cs" />
     <Compile Include="Models\RestRequest.cs" />

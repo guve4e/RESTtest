@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<api base="http://carstuff.ddns.net/web-api/index.php">
+<api base="http://housenet.ddns.net/web-api/index.php">
   <variables>
     <var id="v1" value=""  />
     <var id="v2" value=""  />

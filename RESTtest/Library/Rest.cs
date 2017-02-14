@@ -79,10 +79,7 @@ namespace RESTtest.Library
             {
                 MessageBox.Show("Exception in Rest Constructor " + we.Message);
             }
-            catch (Exception e)
-            {
-                MessageBox.Show("Exception in Rest Constructor " + e.Message);
-            }
+       
 
         }
 
@@ -125,12 +122,12 @@ namespace RESTtest.Library
 
                 // Show to user
                 var response = we.Response as HttpWebResponse;
-                if (response == null)
-                    throw;
-                MessageBox.Show(
-                    "Exception in Rest Request ->" + we.Message + "Response -> " +
+                // if no response from server message the user
+                if (response == null) MessageBox.Show("No Response from server :(");
+                else MessageBox.Show( "Exception in Rest Request ->" + we.Message + "Response -> " +
                     Convert.ToString(response));
             }
+        
 
             return res;
         }// end
@@ -178,12 +175,15 @@ namespace RESTtest.Library
                 // Show to user
                 var response = we.Response as HttpWebResponse;
                 if (response == null)
-                    throw;
+                    throw new RestTestException("null response", 202, we);
                 MessageBox.Show(
                    "Exception in RestPost ->" + we.Message + "Response -> " +
                    Convert.ToString(response));
             }
-
+            catch (RestTestException)
+            {
+                MessageBox.Show("No Response from server :(");
+            }
             return res;
         }
 

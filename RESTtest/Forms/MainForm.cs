@@ -167,8 +167,7 @@ namespace RESTtest
             {
                 case "application/json":
                     this.contentType = "application/json";
-
-                    break;
+                break;
                     // add more
             }
 
@@ -183,7 +182,11 @@ namespace RESTtest
         private void button2_Click(object sender, EventArgs e)
         {
             // clear the request, if any
-            this.requests.Clear(); 
+            if (this.requests != null)
+            {
+                this.requests.Clear();
+            }
+             
             // Open and Load file
             OpenFileDialog fd = new OpenFileDialog();
             if ( fd.ShowDialog() == DialogResult.OK)

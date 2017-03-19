@@ -91,11 +91,11 @@ namespace RESTtest.Library
         {
             // encapsulate the response
             RestResponse res = new RestResponse();
+            // start timer
+            DateTime start = DateTime.Now; 
 
             try
             {
-               
-                var start = DateTime.Now; // start timer
                 HttpWebResponse objResponse = (HttpWebResponse)request.GetResponse();
                 res.Duration = DateTime.Now - start; // end timer
 
@@ -115,6 +115,7 @@ namespace RESTtest.Library
             }
             catch (WebException we) // handle exceptions but no mater what update the RestResposne object
             {
+               
                 // update the RestResponse object
                 if (we.Response is HttpWebResponse) res.UpdateFrom(we.Response as HttpWebResponse);
                 res.Message = we.Message;
@@ -122,13 +123,14 @@ namespace RESTtest.Library
 
                 // Show to user
                 var response = we.Response as HttpWebResponse;
+                // update time
+                res.Duration = DateTime.Now - start;
                 // if no response from server message the user
-                if (response == null) MessageBox.Show("No Response from server :(");
+                if (response == null) MessageBox.Show("No Response from server :( waited " + res.Duration + " seconds");
                 else MessageBox.Show( "Exception in Rest Request ->" + we.Message + "Response -> " +
                     Convert.ToString(response));
             }
-        
-
+     
             return res;
         }// end
 
@@ -145,6 +147,9 @@ namespace RESTtest.Library
             // request.ContentType = "application/x-www-form-urlencoded";
             request.ContentType = "application/json";
 
+            // start timer
+            DateTime start = DateTime.Now;
+
             try
             {
                 // get the request stream 
@@ -157,7 +162,6 @@ namespace RESTtest.Library
 
                 res.Success = true; // if here no exception was thrown
 
-                var start = DateTime.Now; // start timer
                 var httpResponse = (HttpWebResponse)request.GetResponse();
                 res.Duration = DateTime.Now - start; // end timer
                 // get the response
@@ -174,16 +178,14 @@ namespace RESTtest.Library
                 res.Success = false;
                 // Show to user
                 var response = we.Response as HttpWebResponse;
-                if (response == null)
-                    throw new RestTestException("null response", 202, we);
-                MessageBox.Show(
-                   "Exception in RestPost ->" + we.Message + "Response -> " +
-                   Convert.ToString(response));
+                // update time
+                res.Duration = DateTime.Now - start;
+                // if no response from server message the user
+                if (response == null) MessageBox.Show("No Response from server :( waited " + res.Duration + " seconds");
+                else MessageBox.Show("Exception in Rest Request ->" + we.Message + "Response -> " +
+                    Convert.ToString(response));
             }
-            catch (RestTestException)
-            {
-                MessageBox.Show("No Response from server :(");
-            }
+           
             return res;
         }
 

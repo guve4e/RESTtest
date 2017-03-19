@@ -200,6 +200,8 @@ namespace RESTtest.Forms
             }
             else if (sw == "automatic") // if loaded from XML
             {
+                // TODO POST PUT DELETE use same format, combine them to reuse code
+
                 // go trough each request and send it
                 // then check and validate the JSON Schema 
                 foreach(var l in requests)
@@ -342,7 +344,7 @@ namespace RESTtest.Forms
                     this.textBox3.Text = l.method;
                     this.textBox4.Text = l.type;
                 }
-                requests.Clear(); // clear the requests
+              //  requests.Clear(); // clear the requests
             }     
         }
 

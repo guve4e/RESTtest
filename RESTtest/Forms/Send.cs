@@ -129,6 +129,8 @@ namespace RESTtest.Forms
 
             if (sw == "manual") // manually filed fields
             {
+                this.textBox1.Clear();
+
                 switch (this.method) // switch method
                 {
                     case "GET":
@@ -138,11 +140,10 @@ namespace RESTtest.Forms
                         progressBar1.Value = 70;
                         this.response = rest.RestGet();
                         progressBar1.Value = 100;
-                        var g = JsonConvert.SerializeObject(this.response.RawData, Formatting.Indented);
-                        this.textBox1.Clear();
-                        this.textBox1.Text = g;
+                        var g = JsonConvert.SerializeObject(this.response, Formatting.Indented);
+                        this.textBox1.Text += g;
                         // clear the data dictionary
-                        Form1.data.Clear();
+                        //    Form1.data.Clear();
                         break;
                     case "POST":
                         progressBar1.Value = 30;
@@ -152,10 +153,9 @@ namespace RESTtest.Forms
                         this.response = rest.RestPost(this.data);
                         progressBar1.Value = 100;
                         var p = JsonConvert.SerializeObject(this.response, Formatting.Indented);
-                        this.textBox1.Clear();
                         this.textBox1.Text = p;
                         // clear the data dictionary
-                        Form1.data.Clear();
+                    //    Form1.data.Clear();
                         break;
                     case "PUT":
                         progressBar1.Value = 30;
@@ -165,10 +165,9 @@ namespace RESTtest.Forms
                         this.response = rest.RestPost(this.data);
                         progressBar1.Value = 100;
                         var put = JsonConvert.SerializeObject(this.response, Formatting.Indented);
-                        this.textBox1.Clear();
                         this.textBox1.Text = put;
                         // clear the data dictionary
-                        Form1.data.Clear();
+                      //  Form1.data.Clear();
                         break;
                     case "DELETE":
                         progressBar1.Value = 30;
@@ -178,10 +177,9 @@ namespace RESTtest.Forms
                         this.response = rest.RestPost(this.data);
                         progressBar1.Value = 100;
                         var del = JsonConvert.SerializeObject(this.response, Formatting.Indented);
-                        this.textBox1.Clear();
                         this.textBox1.Text = del;
                         // clear the data dictionary
-                        Form1.data.Clear();
+                      //  Form1.data.Clear();
                         //to do
                         break;
 
@@ -377,7 +375,7 @@ namespace RESTtest.Forms
                 }
 
                 // If post and object is created
-                if (Form1.data.Count > 0)
+                if (Form1.data !=null && Form1.data.Count > 0)
                 {
                     this.textBox1.Text += "Object to send - " + "\r\n\r\n";
                     foreach (var v in Form1.data)

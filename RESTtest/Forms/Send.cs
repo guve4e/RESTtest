@@ -89,14 +89,20 @@ namespace RESTtest.Forms
         /// <param name="sw"></param>
         public Send(string url, string method, string type, Dictionary<string, string> json, Dictionary<string, string> headers, string sw = "manual")
         {
+            // Initialize Components
             InitializeComponent();
+            // make the form not re-sizable
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+
+            // Initialize attributes
             this.json = json;
             this.headers = headers;
             this.url = url;
             this.method = method;
             this.type = type;
             this.sw = sw;
-  
+            
+            // Set Progress bar
             progressBar1.Style = ProgressBarStyle.Continuous;
         }
 

@@ -69,6 +69,7 @@
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.button1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "Make_Object";
             this.Text = "Make_Object";
             this.Load += new System.EventHandler(this.Make_Object_Load);

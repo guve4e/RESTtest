@@ -133,6 +133,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.textBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
             this.Name = "Send";
             this.Text = "Send";
             this.Load += new System.EventHandler(this.Send_Load);

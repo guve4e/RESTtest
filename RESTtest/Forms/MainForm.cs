@@ -86,6 +86,9 @@ namespace RESTtest
             // initialize  
             InitializeComponent();
 
+            // make the form not re-sizable
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+
             // initialize comboBox1
             this.comboBox1.Items.Add("GET");
             this.comboBox1.Items.Add("POST");

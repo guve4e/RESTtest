@@ -46,7 +46,11 @@ namespace RESTtest.Forms
             this.sw = data;
             key_count = -1;
             value_count = -1;
+
+            // Initialize Components
             InitializeComponent();
+            // make the form not re-sizable
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -112,13 +116,16 @@ namespace RESTtest.Forms
         }
 
         /// <summary>
-        /// Add Object
+        /// Add Object Button
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
-
+            // Text-Boxes are first shown when the 
+            // Form is Loaded
+            // then OnClick of this button, showTextBoxes is 
+            // invoked again
             showTextBoxes();
         }
 

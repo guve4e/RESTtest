@@ -32,7 +32,7 @@ namespace RESTtest.Forms
         private int value_count { set; get; }
 
         /// <summary>
-        /// Dictionary 
+        /// Dictionary of Text-boxes
         /// To hold Key-Value pair
         /// 
         /// </summary>
@@ -54,18 +54,16 @@ namespace RESTtest.Forms
    
         }
 
-        /// <summary>
-        /// Add Object
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void button1_Click(object sender, EventArgs e)
+        private void showTextBoxes()
         {
+            // Text-boxes to hold the key and the value
             TextBox textBoxKey = new System.Windows.Forms.TextBox();
             TextBox textBoxValue = new System.Windows.Forms.TextBox();
+            // Labels
             Label label1 = new System.Windows.Forms.Label();
             Label label2 = new System.Windows.Forms.Label();
 
+            // ???
             key_count++;
             value_count++;
 
@@ -101,7 +99,7 @@ namespace RESTtest.Forms
             label2.Size = new System.Drawing.Size(48, 13);
             label2.TabIndex = 4;
             label2.Text = ": VALUE";
-           
+
             // add to controls
             flowLayoutPanel1.Controls.Add(label1);
             flowLayoutPanel1.Controls.Add(textBoxKey);
@@ -109,9 +107,19 @@ namespace RESTtest.Forms
             flowLayoutPanel1.Controls.Add(textBoxValue);
             this.Controls.Add(flowLayoutPanel1);
 
-           // add text data to dictionary
-            dictionary.Add(textBoxKey, textBoxValue);
+            // add text data to dictionary
+            this.dictionary.Add(textBoxKey, textBoxValue);
+        }
 
+        /// <summary>
+        /// Add Object
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+            showTextBoxes();
         }
 
         /// <summary>
@@ -125,16 +133,20 @@ namespace RESTtest.Forms
 
 
             // CAREFULL HERE value_count may be -1;
-            if (value_count > -1 && (dict.Count > 0))
+            if (value_count > -1 && (dictionary.Count > 0))
             {
                 // collect the values from the text fields and
                 // insert them in the dictionary 
                  foreach (var v in dictionary)
-                 {
+                { 
                      string key = v.Key.Text.ToString();
                      string value = v.Value.Text.ToString();
 
-                     dict.Add(key, value);
+                    try
+                    {   // Make sure that the keys are unique
+                        dict.Add(key, value);
+                    }
+                    catch (Exception ex) { MessageBox.Show("Exception: " + ex.Message); }
                  }
              
             }
@@ -158,6 +170,16 @@ namespace RESTtest.Forms
             }
             // close the form
             Close();          
+        }
+
+        /// <summary>
+        /// OnLoad
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Make_Object_Load(object sender, EventArgs e)
+        {
+            showTextBoxes();
         }
     }
 }

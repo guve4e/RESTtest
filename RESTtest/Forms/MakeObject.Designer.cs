@@ -71,6 +71,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "Make_Object";
             this.Text = "Make_Object";
+            this.Load += new System.EventHandler(this.Make_Object_Load);
             this.ResumeLayout(false);
 
         }

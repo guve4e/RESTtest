@@ -13,3 +13,4 @@ C:\Users\win\documents\visual studio 2015\Projects\RESTtest\RESTtest\bin\Debug\R
 C:\Users\win\documents\visual studio 2015\Projects\RESTtest\RESTtest\bin\Debug\RESTtest.exe
 C:\Users\win\documents\visual studio 2015\Projects\RESTtest\RESTtest\bin\Debug\RESTtest.pdb
 C:\Users\win\documents\visual studio 2015\Projects\RESTtest\RESTtest\obj\Debug\RESTtest.Forms.History.resources
+C:\Users\win\documents\visual studio 2015\Projects\RESTtest\RESTtest\obj\Debug\RESTtest.csprojResolveAssemblyReference.cache

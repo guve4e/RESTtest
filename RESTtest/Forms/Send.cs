@@ -149,7 +149,7 @@ namespace RESTtest.Forms
                         var g = JsonConvert.SerializeObject(this.response, Formatting.Indented);
                         this.textBox1.Text += g;
                         // clear the data dictionary
-                        //    Form1.data.Clear();
+                        //    MainForm.data.Clear();
                         break;
                     case "POST":
                         progressBar1.Value = 30;
@@ -161,7 +161,7 @@ namespace RESTtest.Forms
                         var p = JsonConvert.SerializeObject(this.response, Formatting.Indented);
                         this.textBox1.Text = p;
                         // clear the data dictionary
-                    //    Form1.data.Clear();
+                    //    MainForm.data.Clear();
                         break;
                     case "PUT":
                         progressBar1.Value = 30;
@@ -173,7 +173,7 @@ namespace RESTtest.Forms
                         var put = JsonConvert.SerializeObject(this.response, Formatting.Indented);
                         this.textBox1.Text = put;
                         // clear the data dictionary
-                      //  Form1.data.Clear();
+                      //  MainForm.data.Clear();
                         break;
                     case "DELETE":
                         progressBar1.Value = 30;
@@ -185,7 +185,7 @@ namespace RESTtest.Forms
                         var del = JsonConvert.SerializeObject(this.response, Formatting.Indented);
                         this.textBox1.Text = del;
                         // clear the data dictionary
-                      //  Form1.data.Clear();
+                      //  MainForm.data.Clear();
                         //to do
                         break;
 
@@ -371,27 +371,27 @@ namespace RESTtest.Forms
                 this.textBox4.Text = this.type;
 
                 // If headers
-                if (Form1.headers.Count > 0)
+                if (MainForm.headers.Count > 0)
                 {
                     this.textBox1.Text += "Headers - " + "\r\n\r\n";
-                    foreach (var v in Form1.headers)
+                    foreach (var v in MainForm.headers)
                     {
                         this.textBox1.Text += v.Key + " => " + v.Value + "\r\n";
                     }
                 }
 
                 // If post and object is created
-                if (Form1.data !=null && Form1.data.Count > 0)
+                if (MainForm.data !=null && MainForm.data.Count > 0)
                 {
                     this.textBox1.Text += "Object to send - " + "\r\n\r\n";
-                    foreach (var v in Form1.data)
+                    foreach (var v in MainForm.data)
                     {
                         this.textBox1.Text += v.Key + " => " + v.Value + "\r\n";
                     }
 
                     this.textBox1.Text += "\r\n";
                     this.textBox1.Text += "JSON string: " + "\r\n";
-                    this.data = Tools.makeObject(Form1.data);
+                    this.data = Tools.makeObject(MainForm.data);
                     this.textBox1.Text += data + "\r\n";
                 }
             }

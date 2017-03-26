@@ -166,10 +166,10 @@ namespace RESTtest.Forms
             switch (this.sw) 
             {
                 case "data": // if called to make JSON object
-                    Form1.data = dict;
+                    MainForm.data = dict;
                     break;
                 case "headers": // if called to make Headers
-                    Form1.headers = dict;
+                    MainForm.headers = dict;
                     break;
                 default: // it shouldn't be here 
                     throw new Exception("Wrong Initialization of sw variable");

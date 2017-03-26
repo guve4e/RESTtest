@@ -162,6 +162,109 @@ namespace RESTtest.Databse
         }// end
 
         /// <summary>
+        /// GetAllRequests
+        /// </summary>
+        /// <returns></returns>
+        public List<RestRequest> GetAllRequests()
+        {
+            // list to collect the requests
+            RestRequest r = null;
+            List<RestRequest> restRequests = null;
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            // some locals
+
+            int prv_id = -1;
+            int r_id = -1;
+            string r_url = "";
+            string r_method = "";
+            string r_controller = "";
+            string r_parameters = "";
+            string r_body = "";
+
+            // query
+            string sql = string.Format(@"
+                    SELECT TOP 30 request.R_ID, R_URL, R_METHOD, R_DATE, R_CONTROLLER, R_PARAMETERS, R_BODY, H_KEY, H_VALUE
+                    FROM request INNER JOIN HEADER ON
+                    request.R_ID = header.R_ID;
+            ");
+
+            try
+            {
+                db.Open(); // open database
+                SqlCommand cmd = MakeSQLCommand(sql);
+                // execute
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                adapter.Fill(ds); // fill adapter
+
+                // time object
+                DateTime r_date;
+                string date = "";
+
+                // make new list
+                restRequests = new List<RestRequest>();
+
+                // collect Request attributes
+                foreach (DataRow row in ds.Tables[0].Rows)
+                {
+                    // get header
+                    string key = Convert.ToString(row["H_KEY"]);
+                    string value = Convert.ToString(row["H_VALUE"]);
+                    // get the id
+                    r_id = Convert.ToInt32(row["R_ID"]);
+
+                    // if id is not equal to the previous id
+                    // make new object and add it to the list
+                    if (r_id != prv_id)
+                    {
+                        r_url = Convert.ToString(row["R_URL"]);
+                        r_method = Convert.ToString(row["R_METHOD"]);
+                        r_date = Convert.ToDateTime(row["R_DATE"]);
+                        date = Convert.ToString(r_date);
+                        r_controller = Convert.ToString(row["R_CONTROLLER"]);
+                        r_parameters = Convert.ToString(row["R_PARAMETERS"]);
+                        r_body = Convert.ToString(row["R_BODY"]);
+                        
+                        // make an object, add headers and add it to the list
+                        r = new RestRequest(r_id, r_url, r_method, date, r_body, r_controller, r_parameters);
+
+                        // TODO check for null/empty values for key:value
+                        r.header.Add(key, value);
+                        restRequests.Add(r);
+                    }
+                    // if the id is the same as the
+                    // previous one do not make new 
+                    // request object but add the key:value pair as headers
+                    // to the last one in the list
+                    else
+                    {
+                        // get the last element
+                        var item = restRequests[restRequests.Count - 1];
+                        // add it to the last element's headers
+                        // TODO check for null/empty values for key:value
+                        item.header.Add(key, value);
+                    }
+                    // set the id to be the same as the previous
+                    // so this id is next previous
+                    prv_id = r_id;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************** Exception In GetLastUpdatedRow ******************");
+                Debug.WriteLine(ex);
+            }
+            finally
+            {
+                db.Close();
+            }
+
+            return restRequests;
+        }
+
+
+        /// <summary>
         /// Gets all the requests
         /// </summary>
         /// <returns></returns>

@@ -1,0 +1,9 @@
+﻿SELECT TOP 30 R_URL, R_METHOD, R_DATE, R_CONTROLLER, R_PARAMETERS, R_BODY, H_KEY, H_VALUE
+FROM request INNER JOIN HEADER ON
+request.R_ID = header.R_ID;
+
+SELECT * FROm request;
+
+SELECT TOP 30 request.R_ID, R_URL, R_METHOD, R_DATE, R_CONTROLLER, R_PARAMETERS, R_BODY, H_KEY, H_VALUE
+                    FROM request INNER JOIN HEADER ON
+                    request.R_ID = header.R_ID;

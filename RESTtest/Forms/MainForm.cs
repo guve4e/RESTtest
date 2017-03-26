@@ -17,7 +17,7 @@ using RESTtest.Models;
 
 namespace RESTtest
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         /// <summary>
         /// Holds JSON Data
@@ -78,7 +78,7 @@ namespace RESTtest
         /// <summary>
         /// Constructor
         /// </summary>
-        public Form1()
+        public MainForm()
         {
             this.contentType = "application/json";
             this.showMakeObject = true;
@@ -247,8 +247,8 @@ namespace RESTtest
         private void historyToolStripMenuItem_Click(object sender, EventArgs e)
         {
             UpdateRequest db = new UpdateRequest();
-
-            History h = new History(requests);
+            List<RestRequest> r =  db.GetAllRequests();
+            History h = new History(r,this);
             h.Show();
         }
     }

@@ -125,7 +125,7 @@ namespace RESTtest
                 string fullUrl = url + "/" + controller;
 
                 // send packed information to Send makeObjetForm
-                Send s = new Forms.Send(fullUrl, this.method, this.contentType,data,headers,"manual");
+                Send s =  Send.GetInstance(fullUrl, this.method, this.contentType, data, headers, "manual");
                 s.baseUrl = url; // update URL
                 s.controller = controller; // update controller 
                 s.Show();

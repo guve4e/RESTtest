@@ -79,6 +79,11 @@ namespace RESTtest.Forms
         public List<RestRequest> requests = new List<RestRequest>();
 
         /// <summary>
+        /// Send Form Instance
+        /// </summary>
+        public static Send sendForm = null; 
+
+        /// <summary>
         /// Constructor 1
         /// </summary>
         /// <param name="url"></param>
@@ -87,7 +92,7 @@ namespace RESTtest.Forms
         /// <param name="json"></param>
         /// <param name="headers"></param>
         /// <param name="sw"></param>
-        public Send(string url, string method, string type, Dictionary<string, string> json, Dictionary<string, string> headers, string sw = "manual")
+        private Send(string url, string method, string type, Dictionary<string, string> json, Dictionary<string, string> headers, string sw = "manual")
         {
             // Initialize Components
             InitializeComponent();
@@ -111,12 +116,40 @@ namespace RESTtest.Forms
         /// </summary>
         /// <param name="requests">List of requests</param>
         /// <param name="sw">switch variable</param>
-        public Send(List<RestRequest> requests, string sw = "automatic")
+        private Send(List<RestRequest> requests, string sw = "automatic")
         {
             InitializeComponent();
             progressBar1.Style = ProgressBarStyle.Continuous;
             this.requests = requests;
             this.sw = sw;
+        }
+
+        /// <summary>
+        /// Singleton
+        /// </summary>
+        /// <returns></returns>
+        public static Send GetInstanceForLoad(List<RestRequest> requests, string sw = "automatic")
+        {
+            if (sendForm == null)
+            {
+                sendForm = new Send(requests, sw);
+                sendForm.FormClosed += delegate { sendForm = null; };
+            }
+            return sendForm;
+        }
+
+        /// <summary>
+        /// Singleton
+        /// </summary>
+        /// <returns></returns>
+        public static Send GetInstance(string url, string method, string type, Dictionary<string, string> json, Dictionary<string, string> headers, string sw = "manual")
+        {
+            if (sendForm == null)
+            {
+                sendForm = new Send(url, method, type, json, headers, sw);
+                sendForm.FormClosed += delegate { sendForm = null; };
+            }
+            return sendForm;
         }
 
         /// <summary>

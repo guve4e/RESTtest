@@ -131,7 +131,7 @@ namespace RESTtest.Library
                 }
 
                 // Send it to Send Form
-                Send s = new Send(requests, "automatic");
+                Send s = Send.GetInstanceForLoad(requests, "automatic");
                 s.Show();
             }
             catch (Exception ex)

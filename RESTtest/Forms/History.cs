@@ -14,7 +14,9 @@ namespace RESTtest.Forms
 {
     public partial class History : Form
     {
-
+        /// <summary>
+        /// History Instance 
+        /// </summary>
         private static History historyForm = null;
 
         public List<RestRequest> requests  { get; set; }
@@ -30,7 +32,7 @@ namespace RESTtest.Forms
         /// </summary>
         /// <param name="requests"></param>
         /// <param name="m"></param>
-        public History(List<RestRequest> requests, MainForm m)
+        private History(List<RestRequest> requests, MainForm m)
         {
             InitializeComponent();
             // set DrawMode
@@ -43,7 +45,7 @@ namespace RESTtest.Forms
         }
 
         /// <summary>
-        /// 
+        /// Singleton
         /// </summary>
         /// <returns></returns>
         public static History GetInstance(List<RestRequest> requests, MainForm m)

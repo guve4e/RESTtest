@@ -36,8 +36,14 @@ namespace RESTtest.Forms
         /// To hold Key-Value pair
         /// 
         /// </summary>
-        private Dictionary<TextBox,TextBox> dictionary = new Dictionary<TextBox,TextBox>();
-        
+        public static Dictionary<TextBox,TextBox> dictionary = new Dictionary<TextBox,TextBox>();
+
+        /// <summary>
+        /// 
+        /// 
+        /// </summary>
+        public static Dictionary<string, string> dict = new Dictionary<string, string>();
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -49,8 +55,12 @@ namespace RESTtest.Forms
 
             // Initialize Components
             InitializeComponent();
-            // make the form not re-sizable
+            // make the makeObjetForm not re-sizable
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
+
+
+            //dict.Add("a", "b");
+            //dict.Add("c", "d");
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -58,7 +68,7 @@ namespace RESTtest.Forms
    
         }
 
-        private void showTextBoxes()
+        private void showTextBoxes(string key = "", string value = "")
         {
             // Text-boxes to hold the key and the value
             TextBox textBoxKey = new System.Windows.Forms.TextBox();
@@ -78,6 +88,8 @@ namespace RESTtest.Forms
             textBoxKey.Name = "textBoxKey" + key_count;
             textBoxKey.Size = new System.Drawing.Size(112, 20);
             textBoxKey.TabIndex = 1;
+            textBoxKey.Text = key; 
+
             // 
             // textBox2
             // 
@@ -85,6 +97,7 @@ namespace RESTtest.Forms
             textBoxValue.Name = "textBoxKey" + value_count;
             textBoxValue.Size = new System.Drawing.Size(112, 20);
             textBoxValue.TabIndex = 2;
+            textBoxValue.Text = value;
             // 
             // label1
             // 
@@ -112,7 +125,7 @@ namespace RESTtest.Forms
             this.Controls.Add(flowLayoutPanel1);
 
             // add text data to dictionary
-            this.dictionary.Add(textBoxKey, textBoxValue);
+             dictionary.Add(textBoxKey, textBoxValue);
         }
 
         /// <summary>
@@ -126,10 +139,10 @@ namespace RESTtest.Forms
             // Form is Loaded
             // then OnClick of this button, showTextBoxes is 
             // invoked again
-            showTextBoxes();
+            showTextBoxes("","");
         }
 
-        /// <summary>
+        /// <summary>z
         /// DONE button
         /// </summary>
         /// <param name="sender"></param>
@@ -175,7 +188,7 @@ namespace RESTtest.Forms
                     throw new Exception("Wrong Initialization of sw variable");
 
             }
-            // close the form
+            // close the makeObjetForm
             Close();          
         }
 
@@ -186,7 +199,14 @@ namespace RESTtest.Forms
         /// <param name="e"></param>
         private void Make_Object_Load(object sender, EventArgs e)
         {
-            showTextBoxes();
+            if (dict != null)
+            {
+                foreach (var v in dict)
+                {
+                    showTextBoxes(v.Key, v.Value);
+                }
+
+            }
         }
     }
 }

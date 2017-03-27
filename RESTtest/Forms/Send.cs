@@ -91,7 +91,7 @@ namespace RESTtest.Forms
         {
             // Initialize Components
             InitializeComponent();
-            // make the form not re-sizable
+            // make the makeObjetForm not re-sizable
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
 
             // Initialize attributes

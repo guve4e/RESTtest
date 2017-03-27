@@ -55,7 +55,7 @@ namespace RESTtest.Library
         internal Dictionary<string, string> headers = new Dictionary<string, string>();
 
         /// <summary>
-        /// List to encapsulate all requests collected form the XML files
+        /// List to encapsulate all requests collected makeObjetForm the XML files
         /// 
         /// This list will be populated from TestCase class
         /// after the class reads the test cases from XML file

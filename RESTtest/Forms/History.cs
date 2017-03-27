@@ -1,4 +1,5 @@
-﻿using RESTtest.Models;
+﻿using Newtonsoft.Json;
+using RESTtest.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,6 +14,9 @@ namespace RESTtest.Forms
 {
     public partial class History : Form
     {
+
+        private static History historyForm = null;
+
         public List<RestRequest> requests  { get; set; }
 
         // Create an instance of the ListBox.
@@ -20,17 +24,36 @@ namespace RESTtest.Forms
 
         // reference to the MainForm
         private MainForm mform;
-
+        
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="requests"></param>
+        /// <param name="m"></param>
         public History(List<RestRequest> requests, MainForm m)
         {
             InitializeComponent();
             // set DrawMode
 
             // get pointer to the MainForm
-            mform = m;
+            this.mform = m;
 
             // set requests
             this.requests = requests;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static History GetInstance(List<RestRequest> requests, MainForm m)
+        {
+            if (historyForm == null)
+            {
+                historyForm = new History(requests,m);
+                historyForm.FormClosed += delegate { historyForm = null; };
+            }
+            return historyForm;
         }
 
         private void History_Load(object sender, EventArgs e)
@@ -50,7 +73,7 @@ namespace RESTtest.Forms
 
             // Set the size and location of the ListBox.
 
-            // Add the ListBox to the form.
+            // Add the ListBox to the makeObjetForm.
             this.Controls.Add(listBox);
             // Set the ListBox to display items in multiple columns.
             listBox.MultiColumn = false;
@@ -93,14 +116,36 @@ namespace RESTtest.Forms
 
         private void button2_Click(object sender, EventArgs e)
         {
+
             // extract the request
             var request = listBox.SelectedItem as RestRequest;
+
+            // make sure that the send makeObjetForm
+            // dictionary is clear because 
+            // you will add to it to construct
+            // request's json data
+            Make_Object.dictionary.Clear();
+
+            // convert the json string to key:value pair
+            // the reason for doing this is that Send.cs uses dictionary
+            // and the user may want to change it
+            // update static dictionary in MakeObject
+            Make_Object.dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(request.json_data);
+
+
+
+        
             // set url
             this.mform.textBox1.Text = Convert.ToString(request.url);
             // set controller
             this.mform.textBox2.Text = Convert.ToString(request.controller);
             // set method
-            this.mform.comboBox1.Text = Convert.ToString(request.method);
+            string method = Convert.ToString(request.method);
+            this.mform.comboBox1.Text = method;
+            if (method == "POST") this.mform.makeObjetForm.Show();
+          
+           
+
             // set content type
             this.mform.comboBox2.Text = Convert.ToString(request.type);
         }

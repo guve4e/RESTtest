@@ -22,7 +22,7 @@ namespace RESTtest
         /// <summary>
         /// Holds JSON Data
         /// Equivalent to data dictionary
-        /// but in different form.
+        /// but in different makeObjetForm.
         /// 
         /// </summary>
         public string json_data { get; set; }
@@ -75,6 +75,9 @@ namespace RESTtest
         /// </summary>
         public bool showMakeObject { get; set; }
 
+
+        public Make_Object makeObjetForm;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -83,10 +86,13 @@ namespace RESTtest
             this.contentType = "application/json";
             this.showMakeObject = true;
 
+            // allocate memory for Make_Objects form
+            makeObjetForm = new Make_Object("data");
+
             // initialize  
             InitializeComponent();
 
-            // make the form not re-sizable
+            // make the makeObjetForm not re-sizable
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
 
             // initialize comboBox1
@@ -96,7 +102,7 @@ namespace RESTtest
             this.comboBox1.Items.Add("DELETE");
             // initialize comboBox2
             this.comboBox2.Items.Add("application/json");
-            this.comboBox2.Items.Add("application/x-www-form-urlencoded");
+            this.comboBox2.Items.Add("application/x-www-makeObjetForm-urlencoded");
 
         }
 
@@ -118,7 +124,7 @@ namespace RESTtest
                 // construct url
                 string fullUrl = url + "/" + controller;
 
-                // send packed information to Send form
+                // send packed information to Send makeObjetForm
                 Send s = new Forms.Send(fullUrl, this.method, this.contentType,data,headers,"manual");
                 s.baseUrl = url; // update URL
                 s.controller = controller; // update controller 
@@ -146,9 +152,8 @@ namespace RESTtest
                 case "POST":
                     if (this.showMakeObject)
                     {
-                        Make_Object form = new Make_Object("data");
-                        form.Text = "Make JSON String";
-                        form.Show();
+                        makeObjetForm.Text = "Make JSON String";
+                        makeObjetForm.Show();
                     }
                     // check if data is null!!!
                     this.method = "POST";
@@ -248,7 +253,8 @@ namespace RESTtest
         {
             UpdateRequest db = new UpdateRequest();
             List<RestRequest> r =  db.GetAllRequests();
-            History h = new History(r,this);
+
+            History h = History.GetInstance(r,this);
             h.Show();
         }
     }

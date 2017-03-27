@@ -148,7 +148,7 @@ namespace RESTtest.Models
 			}
 			else
 			{
-                MessageBox.Show("The JSON response is not in standard form");
+                MessageBox.Show("The JSON response is not in standard makeObjetForm");
 			}
 
 			if (jd is JArray) jlist = jd as JArray;

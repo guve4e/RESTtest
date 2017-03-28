@@ -73,6 +73,7 @@
             this.MaximizeBox = false;
             this.Name = "Make_Object";
             this.Text = "Make_Object";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Make_Object_FormClosing);
             this.Load += new System.EventHandler(this.Make_Object_Load);
             this.ResumeLayout(false);
 

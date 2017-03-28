@@ -208,5 +208,18 @@ namespace RESTtest.Forms
 
             }
         }
+
+        /// <summary>
+        /// OnClosingForm Event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Make_Object_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // hide the form
+            this.Hide();
+            // but don't close
+            e.Cancel = true;
+        }
     }
 }

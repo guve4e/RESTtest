@@ -151,6 +151,5 @@ namespace RESTtest.Forms
             // set content type
             this.mform.comboBox2.Text = Convert.ToString(request.type);
         }
-    
     }
 }

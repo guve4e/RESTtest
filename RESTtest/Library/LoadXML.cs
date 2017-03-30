@@ -19,41 +19,63 @@ namespace RESTtest.Library
     /// Load Information from XML
     /// Makes Lists of requests to be
     /// send to Sent Form for Processing
+    /// It contains TestCase object
+    /// 
     /// </summary>
     class LoadXML
     {
         /// <summary>
         /// File Path
+        /// 
         /// </summary>
         public string  file { get; set; }
 
         /// <summary>
-        /// XmlDoc
+        /// XML object loaded from XML file
+        /// 
         /// </summary>
-        public XmlDocument doc { get; set; }
-
-        /// <summary>
-        /// XML String
-        /// </summary>
-        public string xml { get; set; }
-
         public XDocument xenv;
 
+        /// <summary>
+        /// The base of the URL
+        /// 
+        /// </summary>
         public string url;
 
+        /// <summary>
+        /// Environmental Variables
+        /// 
+        /// </summary>
         internal JObject envariables;
 
+        /// <summary>
+        /// Headers 
+        /// 
+        /// </summary>
         internal Dictionary<string, string> headers = new Dictionary<string, string>();
 
-        public static List<RestRequest> requests = new List<RestRequest>();
+        /// <summary>
+        /// List to encapsulate all requests collected makeObjetForm the XML files
+        /// 
+        /// This list will be populated from TestCase class
+        /// after the class reads the test cases from XML file
+        /// and encapsulate them into requests objects
+        /// 
+        /// </summary>
+        public static List<RestRequest> requests;
 
 
         /// <summary>
         /// Constructor
+        /// Loads the XML Object 
+        ///
         /// </summary>
         /// <param name="file"></param>
         public LoadXML(string file)
         {
+            // 
+            requests = new List<RestRequest>();
+
             this.file = file;
             xenv = XDocument.Load(file);
 
@@ -62,6 +84,7 @@ namespace RESTtest.Library
         /// <summary>
         /// Loads and Parses XML file
         /// Updates requests list
+        /// 
         /// </summary>
         public void Load()
         {
@@ -69,27 +92,31 @@ namespace RESTtest.Library
             {
                 // get environmental variables 
                 envariables = new JObject();
-                // get Url
+                // get URL
                 url = Tools.Attr(xenv.Root, "base");
+
                 // get Environmental Variables
                 foreach (XElement xvar in xenv.Root.Element("variables").Elements())
                 {
                     envariables.Add(new JProperty(Tools.Attr(xvar, "id"), Tools.Attr(xvar, "value")));
                 }
+                
                 // get headers
-                foreach (XElement xhead in xenv.Root.Element("header-all").Elements())
+                foreach (XElement xhead in xenv.Root.Element("headers").Elements())
                 {
                     headers.Add(Tools.Attr(xhead, "id"), Tools.Attr(xhead, "value"));
                 }
-                // get Sequences
-                foreach (XElement xsq in xenv.Root.Elements("sequence"))
+
+                // get test cases
+                foreach (XElement xsq in xenv.Root.Elements("test-cases"))
                 {
-                    string id = Tools.Attr(xsq, "id");
+                    string id = Tools.Attr(xsq, "id"); // get id
 
                     foreach (XElement xtest in xsq.Elements("test"))
                     {
                         string tid = xtest.Attribute("src").Value;
                         string f = xtest.Attribute("src").Value + ".xml";
+                        // TestCases is the name of the folder where the Test Cases suppose to be
                         string fname = "TestCases/" + f; 
                         if (!File.Exists(fname))
                         {
@@ -98,18 +125,18 @@ namespace RESTtest.Library
                         }
                         // make Test Case object
                         var tc = new TestCase(this, fname);
-                        // execute
+                        // call Execute in TestCase class to parse the cases XML
                         tc.Execute(fname);
                     }
                 }
 
                 // Send it to Send Form
-                Send s = new Send(requests, "automatic");
+                Send s = Send.GetInstanceForLoad(requests, "automatic");
                 s.Show();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("Wrong XML format! " + ex.Message);
             }
 
         }// end Load

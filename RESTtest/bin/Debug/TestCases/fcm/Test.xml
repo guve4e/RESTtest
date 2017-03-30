@@ -1,0 +1,23 @@
+<rest method="POST" controller="Test">
+  <data>
+    {
+      "to" : "dTm4uGxgdwU:APA91bFUmvZAAB8ycXgy9_qHR2dswFSK4maQYZxHoI5Oeg5VOUAr77_mBKVAmponeco3JLh58k2tuyEozj-JpoluwzBAgoHCu5aFb1ZFpZLMN6gi5SL5VkrE2s-UoSxZPjDO_eqCSnaR",
+      "notification" : {
+          "body" : "YOU LEFT THE CAR OPEN FOR MORE THAN 15 MIN",
+          "title" : "Warning"
+        },
+        "data" : {
+          "MESAGE" : "YOU LEFT THE CAR OPEN FOR MORE THAN 15 MIN"
+      }
+    }
+  </data>
+  <schema code="200" type="">
+    {
+      "type": "object",
+      "properties": {
+        "message_id": { "type": "string" }
+       },
+       "required": ["message_id"]           
+    }
+  </schema>
+</rest>

@@ -17,7 +17,7 @@ namespace RESTtest.Library
         public string accept { get; set; }
 
         /// <summary>
-        /// Methid
+        /// Method
         /// Ex: GET,POST,PUT,DELETE
         /// </summary>
         public string method { get; set; }
@@ -72,13 +72,15 @@ namespace RESTtest.Library
                     string key = v.Key.ToString();
                     string value = v.Value.ToString();
                     // Add to Headers
-                    request.Headers.Add(key,value);
+                    if (key != "" && value != "")
+                        request.Headers.Add(key,value);
                 }
             }
             catch (WebException we)
             {
                 MessageBox.Show("Exception in Rest Constructor " + we.Message);
             }
+       
 
         }
 
@@ -90,29 +92,31 @@ namespace RESTtest.Library
         {
             // encapsulate the response
             RestResponse res = new RestResponse();
+            // start timer
+            DateTime start = DateTime.Now; 
 
             try
             {
-               
-                var start = DateTime.Now; // start timer
                 HttpWebResponse objResponse = (HttpWebResponse)request.GetResponse();
                 res.Duration = DateTime.Now - start; // end timer
 
                 // get the response in a stream and contain it in a string
                 using (StreamReader responseStream = new StreamReader(objResponse.GetResponseStream()))
                 {
+                    res.Success = true; // if here no exception was thrown
                     // get the response
                     // update RestResposne object
                     if (objResponse is HttpWebResponse) res.UpdateFrom(objResponse as HttpWebResponse);
                     var hresponse = (HttpWebResponse)objResponse;
 
-                    res.Success = true;
-                    res.Method = "GET";
+                    
+                    res.Method = this.method;
                     responseStream.Close(); // close the stream
                 }
             }
             catch (WebException we) // handle exceptions but no mater what update the RestResposne object
             {
+               
                 // update the RestResponse object
                 if (we.Response is HttpWebResponse) res.UpdateFrom(we.Response as HttpWebResponse);
                 res.Message = we.Message;
@@ -120,13 +124,14 @@ namespace RESTtest.Library
 
                 // Show to user
                 var response = we.Response as HttpWebResponse;
-                if (response == null)
-                    throw;
-                MessageBox.Show(
-                    "Exception in Rest Request ->" + we.Message + "Response -> " +
+                // update time
+                res.Duration = DateTime.Now - start;
+                // if no response from server message the user
+                if (response == null) MessageBox.Show("No Response from server :( waited " + res.Duration + " seconds");
+                else MessageBox.Show( "Exception in Rest Request ->" + we.Message + "Response -> " +
                     Convert.ToString(response));
             }
-
+     
             return res;
         }// end
 
@@ -139,8 +144,12 @@ namespace RESTtest.Library
             // encapsulate the response
             RestResponse res = new RestResponse();
             // set the content type
-            // request.ContentType = "application/x-www-form-urlencoded";
+
+            // request.ContentType = "application/x-www-makeObjetForm-urlencoded";
             request.ContentType = "application/json";
+
+            // start timer
+            DateTime start = DateTime.Now;
 
             try
             {
@@ -152,16 +161,15 @@ namespace RESTtest.Library
                     streamWriter.Close();
                 }
 
-                var start = DateTime.Now; // start timer
+                res.Success = true; // if here no exception was thrown
+
                 var httpResponse = (HttpWebResponse)request.GetResponse();
                 res.Duration = DateTime.Now - start; // end timer
                 // get the response
                 // update RestResposne object
                 if (httpResponse is HttpWebResponse) res.UpdateFrom(httpResponse as HttpWebResponse);
                 var hresponse = (HttpWebResponse)httpResponse;
-
-                res.Success = true;
-                res.Method = "POST";
+                res.Method = this.method;
             }
             catch (WebException we)// handle exceptions but no mater what update the RestResposne object
             {
@@ -171,13 +179,14 @@ namespace RESTtest.Library
                 res.Success = false;
                 // Show to user
                 var response = we.Response as HttpWebResponse;
-                if (response == null)
-                    throw;
-                MessageBox.Show(
-                   "Exception in RestPost ->" + we.Message + "Response -> " +
-                   Convert.ToString(response));
+                // update time
+                res.Duration = DateTime.Now - start;
+                // if no response from server message the user
+                if (response == null) MessageBox.Show("No Response from server :( waited " + res.Duration + " seconds");
+                else MessageBox.Show("Exception in Rest Request ->" + we.Message + "Response -> " +
+                    Convert.ToString(response));
             }
-
+           
             return res;
         }
 

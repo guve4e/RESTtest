@@ -4,10 +4,12 @@
  * Author:    skch@usa.net
 This is a free software (MIT license) */
 #endregion
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RESTtest.Library;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -20,10 +22,11 @@ namespace RESTtest.Models
 {
     /// <summary>
     /// Describes Web Response from the API
+    /// The Success member MUST be set first
+    /// 
     /// </summary>
 	public class RestResponse
 	{
-
         // members
         public string Method = "";
 		public bool Success = false;
@@ -34,6 +37,7 @@ namespace RESTtest.Models
 		public string Message = "";
 		public string RedirectUrl = "";
 
+       
 		public JObject jdata;
 		public JArray jlist;
 		public string Code;
@@ -42,6 +46,7 @@ namespace RESTtest.Models
         /// <summary>
         /// Rest class sends an HttpWebRespose to this method.
         /// The method updates the fields of the class
+        /// 
         /// </summary>
         /// <param name="response"></param>
 		public void UpdateFrom(HttpWebResponse response)
@@ -56,7 +61,23 @@ namespace RESTtest.Models
 			reader.Close();
 			dataStream.Close();
 			response.Close();
-		}
+
+            // if the stream returns a server error
+            // it will contain cahrs that Json Parse will not
+            // understand and it will throw an exception
+            if (this.Success)
+            {
+                try
+                {
+                    jdata = JObject.Parse(RawData);
+                }
+                catch (Newtonsoft.Json.JsonReaderException ex)
+                {
+                    Debug.WriteLine(ex);
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
 
 
 		public void ParseResponse()
@@ -82,21 +103,37 @@ namespace RESTtest.Models
 		{
 			if (String.IsNullOrWhiteSpace(RawData))
 			{
-                MessageBox.Show("A successfull call returns empty result");
+                MessageBox.Show("A successful call returns empty result");
 				Success = false;
 				return;
 			}
 			if (RawData == "null")
 			{
-                MessageBox.Show("A successfull call returns JSON null result");
+                MessageBox.Show("A successful call returns JSON null result");
 				Success = false;
 				return;
 			}
-            MessageBox.Show(RawData);
+            Debug.WriteLine(RawData);
+            try
+            {
+                jdata = JObject.Parse(RawData);
+            }
+            catch (Newtonsoft.Json.JsonReaderException ex)
+            {
+                Debug.WriteLine(ex);
+                MessageBox.Show(ex.Message);
+                return;
+            }
 
-			var jresponse = JObject.Parse(RawData);
+
+            var jresponse = JObject.Parse(RawData);
 			JToken jd = jresponse;
-			Code = Tools.Attr(jresponse, "Code");
+
+            // check if the code return is the same as the one 
+            // described in the XML
+            Code = Tools.Attr(jresponse, "Code");
+
+            // if good code
 			if (!String.IsNullOrEmpty(Code))
 			{
 				Message = Tools.Attr(jresponse, "Message");
@@ -111,8 +148,9 @@ namespace RESTtest.Models
 			}
 			else
 			{
-                MessageBox.Show("The JSON response is not in standard form");
+                MessageBox.Show("The JSON response is not in standard makeObjetForm");
 			}
+
 			if (jd is JArray) jlist = jd as JArray;
 			if (jd is JObject) jdata = jd as JObject;
 			Success = (Code == "200") || (Code == "1000");
@@ -154,7 +192,7 @@ namespace RESTtest.Models
 				return;
 			}
 
-            MessageBox.Show("Unknown reponse in HTML format:\n{0}", RawData);
+            MessageBox.Show("Unknown response in HTML format:\n{0}", RawData);
 		}
 
 		public XElement AsXml()

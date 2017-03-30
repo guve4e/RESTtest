@@ -1,0 +1,23 @@
+<rest method="PUT" controller="Test">
+  <data>
+    {
+      "key" : "value",
+      "key2" : "value"
+    }
+  </data>
+  <schema code="200" type="application/json; charset=utf-8">
+    {
+      "type": "object",
+      "items": {
+          "title": "RecentTransactions",
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "occupation": { "type": "string" }
+          },
+          "required": ["name"]     
+        },
+        "minItems": 1
+    }
+  </schema> 
+</rest>

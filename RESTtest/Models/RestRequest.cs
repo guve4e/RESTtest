@@ -16,17 +16,30 @@ namespace RESTtest.Models
 
         public Dictionary<string, string> header = new Dictionary<string, string>();
 
+        public ExpectedResponse response { get; set; }
+
         public string json_data { get; set; }
 
         public RestRequest() { }
-        public RestRequest(string u_id, string url, string method, string date, string body, string controller,string parameters)
+        public RestRequest(int u_id, string url, string method, string date, string body, string controller,string parameters)
         {
-            this.id = id;
+            this.id = u_id;
             this.url = url;
             this.controller = controller;
             this.method = method;
             this.type = type;
-           
+            this.json_data = body;
+        }
+
+        public RestRequest(int u_id, string url, string method, string date, string body, string controller, string parameters, string type)
+        {
+            this.id = u_id;
+            this.url = url;
+            this.controller = controller;
+            this.method = method;
+            this.type = type;
+            this.json_data = body;
+            this.type = type;
         }
     }
 }

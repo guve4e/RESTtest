@@ -32,10 +32,18 @@ namespace RESTtest.Forms
         private int value_count { set; get; }
 
         /// <summary>
+        /// Dictionary of Text-boxes
+        /// To hold Key-Value pair
         /// 
         /// </summary>
-        private Dictionary<TextBox,TextBox> d = new Dictionary<TextBox,TextBox>();
-        
+        public static Dictionary<TextBox,TextBox> dictionary = new Dictionary<TextBox,TextBox>();
+
+        /// <summary>
+        /// 
+        /// 
+        /// </summary>
+        public static Dictionary<string, string> dict = new Dictionary<string, string>();
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -44,7 +52,15 @@ namespace RESTtest.Forms
             this.sw = data;
             key_count = -1;
             value_count = -1;
+
+            // Initialize Components
             InitializeComponent();
+            // make the makeObjetForm not re-sizable
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+
+
+            //dict.Add("a", "b");
+            //dict.Add("c", "d");
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -52,13 +68,16 @@ namespace RESTtest.Forms
    
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void showTextBoxes(string key = "", string value = "")
         {
+            // Text-boxes to hold the key and the value
             TextBox textBoxKey = new System.Windows.Forms.TextBox();
             TextBox textBoxValue = new System.Windows.Forms.TextBox();
+            // Labels
             Label label1 = new System.Windows.Forms.Label();
             Label label2 = new System.Windows.Forms.Label();
 
+            // ???
             key_count++;
             value_count++;
 
@@ -69,6 +88,8 @@ namespace RESTtest.Forms
             textBoxKey.Name = "textBoxKey" + key_count;
             textBoxKey.Size = new System.Drawing.Size(112, 20);
             textBoxKey.TabIndex = 1;
+            textBoxKey.Text = key; 
+
             // 
             // textBox2
             // 
@@ -76,6 +97,7 @@ namespace RESTtest.Forms
             textBoxValue.Name = "textBoxKey" + value_count;
             textBoxValue.Size = new System.Drawing.Size(112, 20);
             textBoxValue.TabIndex = 2;
+            textBoxValue.Text = value;
             // 
             // label1
             // 
@@ -94,7 +116,7 @@ namespace RESTtest.Forms
             label2.Size = new System.Drawing.Size(48, 13);
             label2.TabIndex = 4;
             label2.Text = ": VALUE";
-           
+
             // add to controls
             flowLayoutPanel1.Controls.Add(label1);
             flowLayoutPanel1.Controls.Add(textBoxKey);
@@ -102,12 +124,25 @@ namespace RESTtest.Forms
             flowLayoutPanel1.Controls.Add(textBoxValue);
             this.Controls.Add(flowLayoutPanel1);
 
-           // add text data to dictionary
-            d.Add(textBoxKey, textBoxValue);
-
+            // add text data to dictionary
+             dictionary.Add(textBoxKey, textBoxValue);
         }
 
         /// <summary>
+        /// Add Object Button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button1_Click(object sender, EventArgs e)
+        {
+            // Text-Boxes are first shown when the 
+            // Form is Loaded
+            // then OnClick of this button, showTextBoxes is 
+            // invoked again
+            showTextBoxes("","");
+        }
+
+        /// <summary>z
         /// DONE button
         /// </summary>
         /// <param name="sender"></param>
@@ -118,16 +153,20 @@ namespace RESTtest.Forms
 
 
             // CAREFULL HERE value_count may be -1;
-            if (value_count > -1)
+            if (value_count > -1 && (dictionary.Count > 0))
             {
-                // Collect the values from the text fields and
-                // insert them in the dict dictionary
-                 foreach (var v in d)
-                 {
+                // collect the values from the text fields and
+                // insert them in the dictionary 
+                 foreach (var v in dictionary)
+                { 
                      string key = v.Key.Text.ToString();
                      string value = v.Value.Text.ToString();
 
-                     dict.Add(key, value);
+                    try
+                    {   // Make sure that the keys are unique
+                        dict.Add(key, value);
+                    }
+                    catch (Exception ex) { MessageBox.Show("Exception: " + ex.Message); }
                  }
              
             }
@@ -137,20 +176,50 @@ namespace RESTtest.Forms
             }
         
             
-            switch (this.sw)
+            switch (this.sw) 
             {
                 case "data": // if called to make JSON object
-                    Form1.data = dict;
+                    MainForm.data = dict;
                     break;
                 case "headers": // if called to make Headers
-                    Form1.headers = dict;
+                    MainForm.headers = dict;
                     break;
                 default: // it shouldn't be here 
                     throw new Exception("Wrong Initialization of sw variable");
 
             }
-            // close the form
+            // close the makeObjetForm
             Close();          
+        }
+
+        /// <summary>
+        /// OnLoad
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Make_Object_Load(object sender, EventArgs e)
+        {
+            if (dict != null)
+            {
+                foreach (var v in dict)
+                {
+                    showTextBoxes(v.Key, v.Value);
+                }
+
+            }
+        }
+
+        /// <summary>
+        /// OnClosingForm Event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Make_Object_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // hide the form
+            this.Hide();
+            // but don't close
+            e.Cancel = true;
         }
     }
 }

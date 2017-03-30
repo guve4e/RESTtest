@@ -45,6 +45,7 @@
             // 
             // flowLayoutPanel1
             // 
+            this.flowLayoutPanel1.AutoScroll = true;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(2, 12);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(350, 368);
@@ -69,8 +70,11 @@
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.button1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "Make_Object";
             this.Text = "Make_Object";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Make_Object_FormClosing);
+            this.Load += new System.EventHandler(this.Make_Object_Load);
             this.ResumeLayout(false);
 
         }

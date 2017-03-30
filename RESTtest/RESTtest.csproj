@@ -74,11 +74,17 @@
   <ItemGroup>
     <Compile Include="Databse\Database.cs" />
     <Compile Include="Databse\UpdateRequest.cs" />
-    <Compile Include="Forms\Form1.cs">
+    <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Forms\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\History.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\History.Designer.cs">
+      <DependentUpon>History.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\MakeObject.cs">
       <SubType>Form</SubType>
@@ -94,15 +100,20 @@
     </Compile>
     <Compile Include="Library\LoadXML.cs" />
     <Compile Include="Library\Rest.cs" />
+    <Compile Include="Library\RestTestException.cs" />
     <Compile Include="Library\Tools.cs" />
+    <Compile Include="Models\ExpectedResponse.cs" />
     <Compile Include="Models\RestRequest.cs" />
     <Compile Include="Models\RestResponse.cs" />
-    <Compile Include="Models\TestCase.cs" />
+    <Compile Include="Library\TestCase.cs" />
     <Compile Include="Models\Object.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Forms\Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\History.resx">
+      <DependentUpon>History.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MakeObject.resx">
       <DependentUpon>MakeObject.cs</DependentUpon>
@@ -119,6 +130,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -134,7 +146,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="wiki\pics\" />
+    <Folder Include="Wiki\pics\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">

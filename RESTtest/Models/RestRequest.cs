@@ -30,5 +30,16 @@ namespace RESTtest.Models
             this.type = type;
             this.json_data = body;
         }
+
+        public RestRequest(int u_id, string url, string method, string date, string body, string controller, string parameters, string type)
+        {
+            this.id = u_id;
+            this.url = url;
+            this.controller = controller;
+            this.method = method;
+            this.type = type;
+            this.json_data = body;
+            this.type = type;
+        }
     }
 }

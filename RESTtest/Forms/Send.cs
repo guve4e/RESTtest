@@ -164,7 +164,7 @@ namespace RESTtest.Forms
         private void button1_Click(object sender, EventArgs e)
         {
             Rest rest = null;
-            UpdateRequest u = new UpdateRequest(); // Update Database
+            UpdateRequest db = new UpdateRequest(); // Update Database
 
             if (sw == "manual") // manually filed fields
             {
@@ -232,7 +232,8 @@ namespace RESTtest.Forms
                 r.header = this.headers;
                 r.controller = this.controller;
                 r.json_data = this.data;
-                u.CreateRequest(r);
+                r.type = this.type;
+                db.CreateRequest(r);
                 requests.Clear(); // clear the requests
             }
             else if (sw == "automatic") // if loaded from XML
@@ -385,16 +386,16 @@ namespace RESTtest.Forms
             }     
         }
 
+
         /// <summary>
-        /// On Load
-        /// Switches sw variable
-        /// It does different things
-        /// corresponding to the sw variable
-        /// 
+        /// This Method is called 
+        /// when the Form is first loaded and 
+        /// when the Refresh button is pressed.
+        /// It reads its properties and two static
+        /// dictionaries in MainForm containing 
+        /// json data and headers of the request.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Send_Load(object sender, EventArgs e)
+        private void OnLoad()
         {
             // If Manually entered data in the fields
             if (sw == "manual")
@@ -414,7 +415,7 @@ namespace RESTtest.Forms
                 }
 
                 // If post and object is created
-                if (MainForm.data !=null && MainForm.data.Count > 0)
+                if (MainForm.data != null && MainForm.data.Count > 0)
                 {
                     this.textBox1.Text += "Object to send - " + "\r\n\r\n";
                     foreach (var v in MainForm.data)
@@ -429,7 +430,7 @@ namespace RESTtest.Forms
                 }
             }
             else if (sw == "automatic") // If loaded from XML
-            {   
+            {
                 try
                 {
                     // Load the first request 
@@ -441,13 +442,35 @@ namespace RESTtest.Forms
                 catch (IndexOutOfRangeException ex)
                 {
                     MessageBox.Show("The format of XML is wrong!" + ex.Message);
-                }      
-            }            
+                }
+            }
+        }
+
+        /// <summary>
+        /// On Load Wrapper
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Send_Load(object sender, EventArgs e)
+        {
+            this.OnLoad();
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        /// <summary>
+        /// Simulates reload
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void refreshButton_Click(object sender, EventArgs e)
+        {
+            this.textBox1.Clear();
+            this.OnLoad();
         }
     }
 }

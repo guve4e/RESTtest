@@ -218,29 +218,44 @@ namespace RESTtest
 
         /// <summary>
         /// On Load
-        /// It executes first
+        /// It retrieves the last request form DB
+        /// and populates the fields of the MainForm.
+        /// 
         /// 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Form1_Load(object sender, EventArgs e)
         {
+            // get the last updated row from the table
             UpdateRequest db = new UpdateRequest();
-            rest = db.GetLastUpdatedRowIdRequest();
-            //json_data = JsonConvert.SerializeObject(rest.json_data, Formatting.Indented);
-            data.Clear();
-            data = JsonConvert.DeserializeObject<Dictionary<string, string>>(rest.json_data);
-            headers = rest.header;
-            this.textBox1.Text = rest.url;
-            this.textBox2.Text = rest.controller;
+            List<RestRequest> requests = db.GetRequests(1);
+            RestRequest request = requests.ElementAt(0);
 
-            // if database is empty
-            if (!(rest.url == ""))
+            try
             {
-                this.showMakeObject = false;
+                // fill in the fields 
+
+                data.Clear();
+                data = JsonConvert.DeserializeObject<Dictionary<string, string>>(request.json_data);
+                headers = request.header;
+                this.textBox1.Text = request.url;
+                this.textBox2.Text = request.controller;
+
+                // if database is empty
+                if (!(request.url == ""))
+                {
+                    this.showMakeObject = false;
+                }
+
+                this.comboBox1.Text = request.method;
+                this.comboBox2.Text = request.type;
             }
-            
-            this.comboBox1.Text = rest.method;
+            catch(NullReferenceException ex)
+            {
+                Debug.WriteLine("************** Exception In OnMainFormLoad ******************");
+                Debug.WriteLine(ex);
+            }      
         }
 
         /// <summary>
@@ -252,10 +267,16 @@ namespace RESTtest
         private void historyToolStripMenuItem_Click(object sender, EventArgs e)
         {
             UpdateRequest db = new UpdateRequest();
-            List<RestRequest> r =  db.GetAllRequests();
+            List<RestRequest> r =  db.GetRequests();
 
             History h = History.GetInstance(r,this);
             h.Show();
+        }
+
+        private void jsonDataButton_Click(object sender, EventArgs e)
+        {
+            makeObjetForm.Text = "Make JSON String";
+            makeObjetForm.Show();
         }
     }
 }

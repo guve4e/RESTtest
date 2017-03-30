@@ -72,7 +72,8 @@ namespace RESTtest.Library
                     string key = v.Key.ToString();
                     string value = v.Value.ToString();
                     // Add to Headers
-                    request.Headers.Add(key,value);
+                    if (key != "" && value != "")
+                        request.Headers.Add(key,value);
                 }
             }
             catch (WebException we)

@@ -19,14 +19,14 @@ namespace RESTtest.Forms
         /// </summary>
         private static History historyForm = null;
 
-        public List<RestRequest> requests  { get; set; }
+        public List<RestRequest> requests { get; set; }
 
         // Create an instance of the ListBox.
         ListBox listBox;
 
         // reference to the MainForm
         private MainForm mform;
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -52,7 +52,7 @@ namespace RESTtest.Forms
         {
             if (historyForm == null)
             {
-                historyForm = new History(requests,m);
+                historyForm = new History(requests, m);
                 historyForm.FormClosed += delegate { historyForm = null; };
             }
             return historyForm;
@@ -86,7 +86,7 @@ namespace RESTtest.Forms
             listBox.BeginUpdate();
             // Loop through and add 50 items to the ListBox.
 
-            
+
 
             foreach (var r in requests)
             {
@@ -96,7 +96,7 @@ namespace RESTtest.Forms
 
             // set the display and the value
             listBox.DisplayMember = "url";
-           // listBox.ValueMember = "UserId";
+            // listBox.ValueMember = "UserId";
 
             // Allow the ListBox to repaint and display the new items.
             listBox.EndUpdate();
@@ -136,7 +136,7 @@ namespace RESTtest.Forms
 
 
 
-        
+
             // set url
             this.mform.textBox1.Text = Convert.ToString(request.url);
             // set controller
@@ -145,11 +145,23 @@ namespace RESTtest.Forms
             string method = Convert.ToString(request.method);
             this.mform.comboBox1.Text = method;
             if (method == "POST") this.mform.makeObjetForm.Show();
-          
-           
 
             // set content type
             this.mform.comboBox2.Text = Convert.ToString(request.type);
+
+            // convert the json string to key:value pair
+            // the reason for doing this is that Send.cs uses dictionary
+            // and the user may want to change it
+            // update static dictionary in MainForm
+            MainForm.data = JsonConvert.DeserializeObject<Dictionary<string, string>>(request.json_data);
+
+            // make MainForm.headers to point to the
+            // current request from the chosen from
+            // history 
+            MainForm.headers = request.header;
+
+            // click button programatically 
+            this.mform.testButton.PerformClick();
         }
     }
 }

@@ -12,41 +12,46 @@ namespace RESTtest.Databse
 {
     class UpdateRequest : Database
     {
-    
+
         /// <summary>
         /// Create Request 
         /// 
         /// </summary>
-        /// <param name="u"></param>
+        /// <param name="request">Rest Request</param>
         /// <returns></returns>
-        public bool CreateRequest(RestRequest u)
+        public bool CreateRequest(RestRequest request)
         {
             bool success = false;
             DateTime date = DateTime.Now;
 
             string sql = string.Format(@" 
-                    INSERT INTO Request (R_URL,R_METHOD, R_CONTROLLER, R_PARAMETERS, R_BODY, R_DATE)
-                    VALUES('{0}','{1}','{2}','{3}','{4}','{5}');                        
+                    INSERT INTO Request (R_URL,R_METHOD, R_CONTROLLER, R_PARAMETERS, R_BODY, R_DATE, R_CTYPE)
+                    VALUES('{0}','{1}','{2}','{3}','{4}','{5}','{6}');   
+
+                    SELECT CAST(scope_identity() AS int)
+                     
                 "
-                , u.url, u.method,u.controller,"",u.json_data,date);
+                , request.url, request.method,request.controller,"",request.json_data,date,request.type);
 
             string headers; 
                
             try
             {
-                // update Request first
-                this.db.Open(); // open database
+                
+                this.db.Open(); 
                 SqlCommand cmd = MakeSQLCommand(sql);
+              
+                // make ExecuteScalar to return the id
+                cmd.Parameters.AddWithValue("@Value", "bar");
+                // get the id
+                int r_id = (int)cmd.ExecuteScalar();
+
                 // execute
                 success = ExecuteActionQuery(sql);
                 this.db.Close();
-
-                // get the Id of the added Request
-                // update Header
-                RestRequest r = GetLastUpdatedRowIdRequest();
-                int r_id = r.id;
-                this.db.Open();
-                foreach (KeyValuePair<string,string> d in u.header)
+                   
+                // go around add headers
+                foreach (KeyValuePair<string,string> d in request.header)
                 {
                     headers  = string.Format(@" 
                     INSERT INTO Header(R_ID,H_KEY,H_VALUE)
@@ -63,12 +68,12 @@ namespace RESTtest.Databse
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("************** Exception In CreateUser ******************");
+                Debug.WriteLine("************** Exception In CreateRequest ******************");
                 Debug.WriteLine(ex);
             }
             finally
             {
-                db.Close(); // close Database
+                db.Close();
     
             }
             return success;
@@ -77,95 +82,10 @@ namespace RESTtest.Databse
 
 
         /// <summary>
-        /// Gets the last Request
+        /// GetRequests
         /// </summary>
-        /// <returns></returns>
-        public RestRequest GetLastUpdatedRowIdRequest()
-        {
-            RestRequest r = null;
-            Dictionary<string, string> headers = new Dictionary<string, string>();
-
-            int u_id = -1;
-            string r_url = "";
-            string r_method = "";
-            string r_controller = "";
-            string r_parameters = "";
-            string r_body = "";
-
-            // query
-            string sql = string.Format(@"
-
-                    -- Extract Request's ID from Request Table
-                    DECLARE @ID INTEGER;
-                    SELECT @ID = R_ID FROM Request
-                    WHERE R_DATE=(SELECT max(R_DATE) FROM Request);
-         
-                    -- Get the Row            
-                    SELECT * FROM Request
-                    WHERE R_DATE=(SELECT max(R_DATE) FROM Request);
-                
-                    -- Get Headers
-                    SELECT * FROM Header
-                    WHERE R_ID = @ID;
-
-            ");
-
-            try
-            {
-                db.Open(); // open database
-                SqlCommand cmd = MakeSQLCommand(sql);
-                // execute
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                DataSet ds = new DataSet();
-                adapter.Fill(ds); // fill adapter
-
-                DateTime r_date;
-                string date = "";
-
-                // Collect Request attributes
-                foreach (DataRow row in ds.Tables[0].Rows)
-                {
-                    u_id = Convert.ToInt32(row["R_ID"]);
-                    r_url = Convert.ToString(row["R_URL"]);
-                    r_method = Convert.ToString(row["R_METHOD"]);
-                    r_date = Convert.ToDateTime(row["R_DATE"]);
-                    date = Convert.ToString(r_date);
-                    r_body = Convert.ToString(row["R_BODY"]);
-                    r_controller = Convert.ToString(row["R_CONTROLLER"]);
-                    r_parameters = Convert.ToString(row["R_PARAMETERS"]);
-                   
-                }
-
-                // Collect Headers attributes
-                foreach (DataRow row in ds.Tables[1].Rows)
-                {
-                    string key = Convert.ToString(row["H_KEY"]);
-                    string value = Convert.ToString(row["H_VALUE"]);
-                    headers.Add(key, value);
-                }
-
-                // encapsulate request
-                r = new RestRequest(u_id, r_url, r_method, date, r_body, r_controller, r_parameters);
-                r.header = headers;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("************** Exception In GetLastUpdatedRow ******************");
-                Debug.WriteLine(ex);
-            }
-            finally
-            {
-                db.Close();
-            }
-
-            return r;
-        }// end
-
-        /// <summary>
-        /// GetAllRequests
-        /// </summary>
-        /// <returns></returns>
-        public List<RestRequest> GetAllRequests()
+        /// <returns>Number of Rows you need</returns>
+        public List<RestRequest> GetRequests(int numOfRows = 30)
         {
             // list to collect the requests
             RestRequest r = null;
@@ -180,13 +100,15 @@ namespace RESTtest.Databse
             string r_controller = "";
             string r_parameters = "";
             string r_body = "";
+            string r_type = "";
 
             // query
             string sql = string.Format(@"
-                    SELECT TOP 30 request.R_ID, R_URL, R_METHOD, R_DATE, R_CONTROLLER, R_PARAMETERS, R_BODY, H_KEY, H_VALUE
-                    FROM request INNER JOIN HEADER ON
-                    request.R_ID = header.R_ID;
-            ");
+                    SELECT TOP {0} request.R_ID, R_URL, R_METHOD, R_DATE, R_CONTROLLER, R_PARAMETERS, R_BODY,R_CTYPE, H_KEY, H_VALUE
+                    FROM request LEFT JOIN HEADER ON
+                    request.R_ID = header.R_ID
+					ORDER BY R_DATE;
+            ", numOfRows);
 
             try
             {
@@ -224,9 +146,9 @@ namespace RESTtest.Databse
                         r_controller = Convert.ToString(row["R_CONTROLLER"]);
                         r_parameters = Convert.ToString(row["R_PARAMETERS"]);
                         r_body = Convert.ToString(row["R_BODY"]);
-                        
+                        r_type = Convert.ToString(row["R_CTYPE"]);
                         // make an object, add headers and add it to the list
-                        r = new RestRequest(r_id, r_url, r_method, date, r_body, r_controller, r_parameters);
+                        r = new RestRequest(r_id, r_url, r_method, date, r_body, r_controller, r_parameters,r_type);
 
                         // TODO check for null/empty values for key:value
                         r.header.Add(key, value);
@@ -252,7 +174,7 @@ namespace RESTtest.Databse
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("************** Exception In GetLastUpdatedRow ******************");
+                Debug.WriteLine("************** Exception In GetRequests ******************");
                 Debug.WriteLine(ex);
             }
             finally

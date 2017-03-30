@@ -32,7 +32,7 @@
             this.menuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.historyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.button1 = new System.Windows.Forms.Button();
+            this.testButton = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -42,8 +42,9 @@
             this.label4 = new System.Windows.Forms.Label();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.process1 = new System.Diagnostics.Process();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
+            this.loadButton = new System.Windows.Forms.Button();
+            this.addHeadersButton = new System.Windows.Forms.Button();
+            this.jsonDataButton = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -79,15 +80,15 @@
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
             // 
-            // button1
+            // testButton
             // 
-            this.button1.Location = new System.Drawing.Point(15, 249);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(91, 47);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "TEST";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.testButton.Location = new System.Drawing.Point(15, 249);
+            this.testButton.Name = "testButton";
+            this.testButton.Size = new System.Drawing.Size(91, 47);
+            this.testButton.TabIndex = 1;
+            this.testButton.Text = "TEST";
+            this.testButton.UseVisualStyleBackColor = true;
+            this.testButton.Click += new System.EventHandler(this.button1_Click);
             // 
             // textBox1
             // 
@@ -169,33 +170,44 @@
             this.process1.StartInfo.UserName = "";
             this.process1.SynchronizingObject = this;
             // 
-            // button2
+            // loadButton
             // 
-            this.button2.Location = new System.Drawing.Point(310, 249);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(104, 47);
-            this.button2.TabIndex = 10;
-            this.button2.Text = "LOAD TEST XML";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.loadButton.Location = new System.Drawing.Point(310, 249);
+            this.loadButton.Name = "loadButton";
+            this.loadButton.Size = new System.Drawing.Size(104, 47);
+            this.loadButton.TabIndex = 10;
+            this.loadButton.Text = "LOAD TEST XML";
+            this.loadButton.UseVisualStyleBackColor = true;
+            this.loadButton.Click += new System.EventHandler(this.button2_Click);
             // 
-            // button4
+            // addHeadersButton
             // 
-            this.button4.Location = new System.Drawing.Point(329, 118);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(85, 58);
-            this.button4.TabIndex = 12;
-            this.button4.Text = "Add Headers";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.addHeadersButton.Location = new System.Drawing.Point(329, 155);
+            this.addHeadersButton.Name = "addHeadersButton";
+            this.addHeadersButton.Size = new System.Drawing.Size(85, 21);
+            this.addHeadersButton.TabIndex = 12;
+            this.addHeadersButton.Text = "Add Headers";
+            this.addHeadersButton.UseVisualStyleBackColor = true;
+            this.addHeadersButton.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // jsonDataButton
+            // 
+            this.jsonDataButton.Location = new System.Drawing.Point(329, 118);
+            this.jsonDataButton.Name = "jsonDataButton";
+            this.jsonDataButton.Size = new System.Drawing.Size(85, 21);
+            this.jsonDataButton.TabIndex = 13;
+            this.jsonDataButton.Text = "Make Object";
+            this.jsonDataButton.UseVisualStyleBackColor = true;
+            this.jsonDataButton.Click += new System.EventHandler(this.jsonDataButton_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(426, 316);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.jsonDataButton);
+            this.Controls.Add(this.addHeadersButton);
+            this.Controls.Add(this.loadButton);
             this.Controls.Add(this.comboBox2);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.comboBox1);
@@ -204,7 +216,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.testButton);
             this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.menuStrip1;
@@ -224,19 +236,20 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem menuToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Diagnostics.Process process1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button loadButton;
+        private System.Windows.Forms.Button addHeadersButton;
         private System.Windows.Forms.ToolStripMenuItem historyToolStripMenuItem;
         public System.Windows.Forms.TextBox textBox1;
         public System.Windows.Forms.TextBox textBox2;
         public System.Windows.Forms.ComboBox comboBox1;
         public System.Windows.Forms.ComboBox comboBox2;
+        public System.Windows.Forms.Button testButton;
+        private System.Windows.Forms.Button jsonDataButton;
     }
 }
 

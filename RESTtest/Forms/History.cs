@@ -59,9 +59,11 @@ namespace RESTtest.Forms
             return historyForm;
         }
 
+        /// <summary>
+        /// Wrapper over History_Load
+        /// </summary>
         private void OnLoad()
         {
-
             foreach (var r in requests)
             {
                 listBox.Items.Add(r);

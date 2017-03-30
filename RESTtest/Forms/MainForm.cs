@@ -25,14 +25,14 @@ namespace RESTtest
         /// but in different makeObjetForm.
         /// 
         /// </summary>
-        public string json_data { get; set; }
+        public static string json_data { get; set; }
 
         /// <summary>
         /// List of requests
         /// Coming from Database
         /// 
         /// </summary>
-        public List<RestRequest> requests { get; set; }
+        public static List<RestRequest> requests { get; set; }
 
         /// <summary>
         /// Global Static
@@ -54,14 +54,21 @@ namespace RESTtest
         /// Method
         /// 
         /// </summary>
-        public string method { get; set; }
+        public static string method { get; set; }
 
         /// <summary>
         /// Content type
         /// 
         /// </summary>
-        public string contentType { get; set; }
-        
+        public static string type { get; set; }
+
+        public static string baseUrl { get; set; }
+
+        public static string controller { get; set; }
+    
+        public static string url { get; set; }
+
+
         /// <summary>
         /// RestRequest Object
         /// 
@@ -83,7 +90,10 @@ namespace RESTtest
         /// </summary>
         public MainForm()
         {
-            this.contentType = "application/json";
+
+            // TODO is static now, take it from box
+            type = "application/json";
+
             this.showMakeObject = true;
 
             // allocate memory for Make_Objects form
@@ -119,15 +129,13 @@ namespace RESTtest
                 this.comboBox1.SelectedItem != null && this.comboBox2.SelectedItem != null)
             {
                 // extract info from textBoxes
-                string url = this.textBox1.Text.ToString();
-                string controller = this.textBox2.Text.ToString();
-                // construct url
-                string fullUrl = url + "/" + controller;
+                baseUrl = this.textBox1.Text.ToString();
+                controller = this.textBox2.Text.ToString();
+                // construct baseUrl
+                url = baseUrl + "/" + controller;
 
                 // send packed information to Send makeObjetForm
-                Send s =  Send.GetInstance(fullUrl, this.method, this.contentType, data, headers, "manual");
-                s.baseUrl = url; // update URL
-                s.controller = controller; // update controller 
+                Send s =  Send.GetInstance("manual");
                 s.Show();
             }
             else
@@ -156,12 +164,12 @@ namespace RESTtest
                         makeObjetForm.Show();
                     }
                     // check if data is null!!!
-                    this.method = "POST";
+                    method = "POST";
                     this.showMakeObject = true;
 
                     break;
                 case "GET":
-                    this.method = "GET";
+                    method = "GET";
                     this.showMakeObject = true;
                     break;
             }
@@ -174,7 +182,7 @@ namespace RESTtest
             switch (selectedItem)
             {
                 case "application/json":
-                    this.contentType = "application/json";
+                    type = "application/json";
                 break;
                     // add more
             }
@@ -190,9 +198,9 @@ namespace RESTtest
         private void button2_Click(object sender, EventArgs e)
         {
             // clear the request, if any
-            if (this.requests != null)
+            if (requests != null)
             {
-                this.requests.Clear();
+                requests.Clear();
             }
              
             // Open and Load file
@@ -227,13 +235,16 @@ namespace RESTtest
         /// <param name="e"></param>
         private void Form1_Load(object sender, EventArgs e)
         {
-            // get the last updated row from the table
-            UpdateRequest db = new UpdateRequest();
-            List<RestRequest> requests = db.GetRequests(1);
-            RestRequest request = requests.ElementAt(0);
-
+          
             try
             {
+
+                // get the last updated row from the table
+                UpdateRequest db = new UpdateRequest();
+                List<RestRequest> requests = db.GetRequests(1);
+                RestRequest request = requests.ElementAt(0);
+
+
                 // fill in the fields 
 
                 data.Clear();
@@ -255,7 +266,12 @@ namespace RESTtest
             {
                 Debug.WriteLine("************** Exception In OnMainFormLoad ******************");
                 Debug.WriteLine(ex);
-            }      
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("************** Exception In OnMainFormLoad ******************");
+                Debug.WriteLine(ex);
+            }
         }
 
         /// <summary>

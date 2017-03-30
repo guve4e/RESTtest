@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using RESTtest.Databse;
 using RESTtest.Models;
 using System;
 using System.Collections.Generic;
@@ -58,9 +59,34 @@ namespace RESTtest.Forms
             return historyForm;
         }
 
-        private void History_Load(object sender, EventArgs e)
+        private void OnLoad()
         {
 
+            foreach (var r in requests)
+            {
+                listBox.Items.Add(r);
+            }
+
+
+            // set the display and the value
+            listBox.DisplayMember = "url";
+            // listBox.ValueMember = "UserId";
+
+            // Allow the ListBox to repaint and display the new items.
+            listBox.EndUpdate();
+
+
+            //TODO
+            //// Display the second selected item in the ListBox to the console.
+            //System.Diagnostics.Debug.WriteLine(listBox.SelectedItems[1].ToString());
+            //// Display the index of the first selected item in the ListBox.
+            //System.Diagnostics.Debug.WriteLine(listBox.SelectedIndices[0].ToString());
+
+            listBox.Show();
+        }
+
+        private void History_Load(object sender, EventArgs e)
+        {
             // Create an instance of the ListBox.
             listBox = new ListBox();
             // Set the size and location of the ListBox.
@@ -84,32 +110,8 @@ namespace RESTtest.Forms
 
             // Shutdown the painting of the ListBox as items are added.
             listBox.BeginUpdate();
-            // Loop through and add 50 items to the ListBox.
 
-
-
-            foreach (var r in requests)
-            {
-                listBox.Items.Add(r);
-            }
-
-
-            // set the display and the value
-            listBox.DisplayMember = "url";
-            // listBox.ValueMember = "UserId";
-
-            // Allow the ListBox to repaint and display the new items.
-            listBox.EndUpdate();
-
-
-
-            //TODO
-            //// Display the second selected item in the ListBox to the console.
-            //System.Diagnostics.Debug.WriteLine(listBox.SelectedItems[1].ToString());
-            //// Display the index of the first selected item in the ListBox.
-            //System.Diagnostics.Debug.WriteLine(listBox.SelectedIndices[0].ToString());
-
-            listBox.Show();
+            OnLoad();
         }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -134,17 +136,18 @@ namespace RESTtest.Forms
             // update static dictionary in MakeObject
             Make_Object.dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(request.json_data);
 
-
-
-
-            // set url
+            // set baseUrl
             this.mform.textBox1.Text = Convert.ToString(request.url);
             // set controller
             this.mform.textBox2.Text = Convert.ToString(request.controller);
+            
+            
             // set method
             string method = Convert.ToString(request.method);
             this.mform.comboBox1.Text = method;
+
             if (method == "POST") this.mform.makeObjetForm.Show();
+            // TODO rest of the Methods
 
             // set content type
             this.mform.comboBox2.Text = Convert.ToString(request.type);
@@ -162,6 +165,22 @@ namespace RESTtest.Forms
 
             // click button programatically 
             this.mform.testButton.PerformClick();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            UpdateRequest db = new UpdateRequest();
+
+            // extract the request
+            var request = listBox.SelectedItem as RestRequest;
+
+            if (request != null)
+            {
+                db.DeleteRequest(request.id);
+                this.requests = db.GetRequests();
+                listBox.Items.Clear();
+                OnLoad();
+            }
         }
     }
 }

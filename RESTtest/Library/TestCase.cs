@@ -83,7 +83,7 @@ namespace RESTtest.Models
                 // Load XML Object from parent 
                 this.envdoc = parent.xenv;
 
-                // Load url from parent
+                // Load baseUrl from parent
                 this.url = parent.url;
 
                 // Load the test case

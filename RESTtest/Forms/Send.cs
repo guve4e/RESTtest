@@ -17,17 +17,17 @@ namespace RESTtest.Forms
 {
     public partial class Send : Form
     {
-        /// <summary>
-        /// Global
-        /// holds JSON Data
-        /// </summary>
-        public Dictionary<string, string> json = new Dictionary<string, string>();
+        ///// <summary>
+        ///// Global
+        ///// holds JSON Data
+        ///// </summary>
+        //public Dictionary<string, string> json = new Dictionary<string, string>();
 
-        /// <summary>
-        /// Global,
-        /// Headers
-        /// </summary>
-        public Dictionary<string, string> headers = new Dictionary<string, string>();
+        ///// <summary>
+        ///// Global,
+        ///// Headers
+        ///// </summary>
+        //public Dictionary<string, string> headers = new Dictionary<string, string>();
 
         /// <summary>
         /// Switch variable.
@@ -36,37 +36,37 @@ namespace RESTtest.Forms
         /// </summary>
         public string sw { get; set; }
 
-        /// <summary>
-        /// URL
-        /// </summary>
-        public string  url { get; set; }
+        ///// <summary>
+        ///// URL
+        ///// </summary>
+        //public string  baseUrl { get; set; }
 
-        /// <summary>
-        /// Method 
-        /// Ex: GET,POST,DELETE,PUT
-        /// 
-        /// </summary>
-        public string  method { get; set; }
+        ///// <summary>
+        ///// Method 
+        ///// Ex: GET,POST,DELETE,PUT
+        ///// 
+        ///// </summary>
+        //public string  method { get; set; }
 
-        /// <summary>
-        /// Type
-        /// </summary>
-        public string type { get; set; }
+        ///// <summary>
+        ///// Type
+        ///// </summary>
+        //public string type { get; set; }
 
-        /// <summary>
-        /// Data to be sent
-        /// </summary>
-        public string data { get; set; }
+        ///// <summary>
+        ///// Data to be sent
+        ///// </summary>
+        //public string data { get; set; }
 
-        /// <summary>
-        /// URL the base of the API URL
-        /// </summary>
-        public string baseUrl { get; set; }
+        ///// <summary>
+        ///// URL the base of the API URL
+        ///// </summary>
+        //public string baseUrl { get; set; }
 
-        /// <summary>
-        /// Controller
-        /// </summary>
-        public string controller { get; set; }
+        ///// <summary>
+        ///// Controller
+        ///// </summary>
+        //public string controller { get; set; }
 
         /// <summary>
         ///  Rest Response
@@ -92,19 +92,13 @@ namespace RESTtest.Forms
         /// <param name="json"></param>
         /// <param name="headers"></param>
         /// <param name="sw"></param>
-        private Send(string url, string method, string type, Dictionary<string, string> json, Dictionary<string, string> headers, string sw = "manual")
+        private Send(string sw = "manual")
         {
             // Initialize Components
             InitializeComponent();
             // make the makeObjetForm not re-sizable
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
 
-            // Initialize attributes
-            this.json = json;
-            this.headers = headers;
-            this.url = url;
-            this.method = method;
-            this.type = type;
             this.sw = sw;
             
             // Set Progress bar
@@ -142,11 +136,11 @@ namespace RESTtest.Forms
         /// Singleton
         /// </summary>
         /// <returns></returns>
-        public static Send GetInstance(string url, string method, string type, Dictionary<string, string> json, Dictionary<string, string> headers, string sw = "manual")
+        public static Send GetInstance(string sw = "manual")
         {
             if (sendForm == null)
             {
-                sendForm = new Send(url, method, type, json, headers, sw);
+                sendForm = new Send(sw);
                 sendForm.FormClosed += delegate { sendForm = null; };
             }
             return sendForm;
@@ -170,12 +164,12 @@ namespace RESTtest.Forms
             {
                 this.textBox1.Clear();
 
-                switch (this.method) // switch method
+                switch (MainForm.method) // switch method
                 {
                     case "GET":
                         progressBar1.Value = 30;
                         // RestCall
-                        rest = new Rest("*/*", this.method, this.url, this.type, this.headers);
+                        rest = new Rest("*/*", MainForm.method, MainForm.baseUrl, MainForm.type, MainForm.headers);
                         progressBar1.Value = 70;
                         this.response = rest.RestGet();
                         progressBar1.Value = 100;
@@ -187,9 +181,9 @@ namespace RESTtest.Forms
                     case "POST":
                         progressBar1.Value = 30;
                         // RestCall
-                        rest = new Rest("*/*", this.method, this.url, this.type, this.headers);
+                        rest = new Rest("*/*", MainForm.method, MainForm.baseUrl, MainForm.type, MainForm.headers);
                         progressBar1.Value = 70;
-                        this.response = rest.RestPost(this.data);
+                        this.response = rest.RestPost(JsonConvert.SerializeObject(MainForm.data));
                         progressBar1.Value = 100;
                         var p = JsonConvert.SerializeObject(this.response, Formatting.Indented);
                         this.textBox1.Text = p;
@@ -199,9 +193,9 @@ namespace RESTtest.Forms
                     case "PUT":
                         progressBar1.Value = 30;
                         // RestCall
-                        rest = new Rest("*/*", this.method, this.url, this.type, this.headers);
+                        rest = new Rest("*/*", MainForm.method, MainForm.baseUrl, MainForm.type, MainForm.headers);
                         progressBar1.Value = 70;
-                        this.response = rest.RestPost(this.data);
+                        this.response = rest.RestPost(JsonConvert.SerializeObject(MainForm.data));
                         progressBar1.Value = 100;
                         var put = JsonConvert.SerializeObject(this.response, Formatting.Indented);
                         this.textBox1.Text = put;
@@ -211,9 +205,9 @@ namespace RESTtest.Forms
                     case "DELETE":
                         progressBar1.Value = 30;
                         // RestCall
-                        rest = new Rest("*/*", this.method, this.url, this.type, this.headers);
+                        rest = new Rest("*/*", MainForm.method, MainForm.baseUrl, MainForm.type, MainForm.headers);
                         progressBar1.Value = 70;
-                        this.response = rest.RestPost(this.data);
+                        this.response = rest.RestPost(JsonConvert.SerializeObject(MainForm.data));
                         progressBar1.Value = 100;
                         var del = JsonConvert.SerializeObject(this.response, Formatting.Indented);
                         this.textBox1.Text = del;
@@ -227,12 +221,13 @@ namespace RESTtest.Forms
                 // update database with this request
                 // update database works only if fields are field manually
                 RestRequest r = new RestRequest();
-                r.url = this.baseUrl;
-                r.method = this.method;
-                r.header = this.headers;
-                r.controller = this.controller;
-                r.json_data = this.data;
-                r.type = this.type;
+                r.url = MainForm.url;
+                r.method = MainForm.method;
+                r.header = MainForm.headers;
+                r.controller = MainForm.controller;
+                string data = JsonConvert.SerializeObject(MainForm.data);
+                r.json_data = data;
+                r.type = MainForm.type;
                 db.CreateRequest(r);
                 requests.Clear(); // clear the requests
             }
@@ -286,7 +281,7 @@ namespace RESTtest.Forms
                     else if (l.method == "POST")
                     {
                         progressBar1.Value = 30;
-                        rest = new Rest("*/*", l.method, uri, this.type, l.header);
+                        rest = new Rest("*/*", l.method, uri, MainForm.type, l.header);
                         progressBar1.Value = 70;
                         this.response = rest.RestPost(l.json_data);
                         progressBar1.Value = 100;
@@ -317,7 +312,7 @@ namespace RESTtest.Forms
                     else if (l.method == "PUT")
                     {
                         progressBar1.Value = 30;
-                        rest = new Rest("*/*", l.method, uri, this.type, l.header);
+                        rest = new Rest("*/*", l.method, uri, MainForm.type, l.header);
                         progressBar1.Value = 70;
                         this.response = rest.RestPost(l.json_data);
                         progressBar1.Value = 100;
@@ -348,7 +343,7 @@ namespace RESTtest.Forms
                     else if (l.method == "DELETE")
                     {
                         progressBar1.Value = 30;
-                        rest = new Rest("*/*", l.method, uri, this.type, l.header);
+                        rest = new Rest("*/*", l.method, uri, MainForm.type, l.header);
                         progressBar1.Value = 70;
                         this.response = rest.RestPost(l.json_data);
                         progressBar1.Value = 100;
@@ -400,13 +395,14 @@ namespace RESTtest.Forms
             // If Manually entered data in the fields
             if (sw == "manual")
             {
-                this.textBox2.Text = this.url;
-                this.textBox3.Text = this.method;
-                this.textBox4.Text = this.type;
+                this.textBox2.Text = MainForm.url;
+                this.textBox3.Text = MainForm.method;
+                this.textBox4.Text = MainForm.type;
 
                 // If headers
                 if (MainForm.headers.Count > 0)
                 {
+                    // print info in the text box
                     this.textBox1.Text += "Headers - " + "\r\n\r\n";
                     foreach (var v in MainForm.headers)
                     {
@@ -425,7 +421,7 @@ namespace RESTtest.Forms
 
                     this.textBox1.Text += "\r\n";
                     this.textBox1.Text += "JSON string: " + "\r\n";
-                    this.data = Tools.makeObject(MainForm.data);
+                    string data = Tools.makeObject(MainForm.data);
                     this.textBox1.Text += data + "\r\n";
                 }
             }
